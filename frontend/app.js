@@ -1498,3 +1498,40 @@ async function addSearchParam() {
         showToast('Parâmetro adicionado (modo offline).');
     }
 }
+
+// ── Translation & Date Helpers ──
+
+function getMonthName(month) {
+    const months = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+    const mIdx = parseInt(month) - 1;
+    return months[mIdx] || "Dezembro";
+}
+
+function translateType(type) {
+    const types = {
+        "course": "Curso",
+        "event": "Evento",
+        "video": "Vídeo",
+        "news": "Notícia",
+        "award": "Prêmio",
+        "lattes": "Currículo Lattes",
+        "student": "Aluno",
+        "testimonial": "Depoimento",
+        "timeline": "Cronologia",
+        "social": "Rede Social"
+    };
+    return types[type] || type;
+}
+
+function translateRelation(relation) {
+    const relations = {
+        "patient": "Paciente",
+        "student": "Aluno/Mentorando",
+        "peer": "Colega Profissional",
+        "other": "Outro"
+    };
+    return relations[relation] || relation;
+}
