@@ -39,8 +39,8 @@
                         <img src="gif.gif" alt="Memorial Digital Logo" class="brand-logo-gif">
                     </div>
                     <div class="logo-text">
-                        <span class="logo-title">MEMORIAL DIGITAL</span>
-                        <span class="logo-subtitle">Dra. Nássara Mesquita</span>
+                        <span class="logo-title">BY C1B0RG</span>
+                        <span class="logo-subtitle">Memorial Digital - Nássara</span>
                     </div>
                 </div>
             </div>
@@ -105,32 +105,10 @@
             <header class="content-header">
                 <h1 class="page-title" id="main-page-title">Painel de Investigação Biográfica</h1>
                 <div class="header-actions">
-                    <!-- Theme Toggle Button (Moon / Sun) -->
-                    <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Alternar tema">
-                        <svg class="theme-icon moon-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                        </svg>
-                        <svg class="theme-icon sun-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line>
-                            <line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                        </svg>
-                    </button>
-                    
                     <div class="search-bar-wrapper">
                         <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
                         <input type="text" id="global-search-input" placeholder="Buscar em toda a presença digital...">
                     </div>
-                    <button class="btn-primary" id="btn-sync-pipeline">
-                        <span><i class="fa-solid fa-rotate"></i></span>
-                        <span>Buscar Atualizações</span>
-                    </button>
                 </div>
             </header>
 
@@ -227,17 +205,29 @@
 
                 <!-- ── SECTION: TIMELINE (CHRONOLOGY V2) ── -->
                 <section class="view-section" id="section-timeline">
+                    <!-- Top bar: Display Mode Buttons -->
+                    <div class="timeline-topbar glass-panel animate-fade-in">
+                        <div class="timeline-topbar-left">
+                            <span class="topbar-label"><i class="fa-solid fa-display"></i> Modo de Exibição:</span>
+                            <div class="display-mode-buttons">
+                                <button class="display-mode-btn active" id="btn-mode-standard"><i class="fa-solid fa-grip-lines-vertical"></i> Padrão</button>
+                                <button class="display-mode-btn" id="btn-mode-hierarchical"><i class="fa-solid fa-sitemap"></i> Hierárquico</button>
+                            </div>
+                        </div>
+                        <div class="timeline-topbar-right">
+                            <button class="btn-print-timeline" id="btn-print-timeline">
+                                <i class="fa-solid fa-print"></i> Imprimir
+                            </button>
+                            <button class="btn-clear-filters" id="btn-clear-all-filters" style="padding: 8px 14px; font-size: 12px;">
+                                <i class="fa-solid fa-filter-circle-xmark"></i> Limpar Filtros
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bottom: filters + results -->
                     <div class="timeline-layout-split">
                         <!-- Advanced multi-facet filters sidebar panel -->
                         <aside class="timeline-filters-sidebar glass-panel animate-fade-in">
-                            <div class="sidebar-filter-section">
-                                <h5 class="filter-section-title">Modo de Exibição</h5>
-                                <div class="display-mode-buttons">
-                                    <button class="display-mode-btn active" id="btn-mode-standard"><i class="fa-solid fa-grip-lines-vertical"></i> Padrão</button>
-                                    <button class="display-mode-btn" id="btn-mode-hierarchical"><i class="fa-solid fa-sitemap"></i> Hierárquico</button>
-                                </div>
-                            </div>
-                            
                             <div class="sidebar-filter-section">
                                 <h5 class="filter-section-title">Ano</h5>
                                 <div class="filter-chips-grid" id="facet-years">
@@ -272,13 +262,6 @@
                                     <!-- Populated dynamically by JS -->
                                 </div>
                             </div>
-
-                            <button class="btn-clear-filters" id="btn-clear-all-filters">
-                                <i class="fa-solid fa-filter-circle-xmark"></i> Limpar Filtros
-                            </button>
-                            <button class="btn-print-timeline" id="btn-print-timeline" style="margin-top: 10px; background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.3); color: var(--cyan); padding: 10px; border-radius: var(--border-radius-md); cursor: pointer; font-size: 12px; font-weight: 600; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition-smooth);">
-                                <i class="fa-solid fa-print"></i> Imprimir Linha do Tempo
-                            </button>
                         </aside>
                         
                         <!-- Timeline active area -->
@@ -296,11 +279,16 @@
                 <!-- ── SECTION: LATTES CURRICULUM V2 ── -->
                 <section class="view-section" id="section-lattes">
                     <div class="lattes-curriculum-wrapper glass-panel animate-fade-in">
-                        <div class="lattes-header">
+                        <div class="lattes-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--cyan); padding-bottom: 16px; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
                             <div class="lattes-logo"><i class="fa-solid fa-file-invoice"></i> Currículo Lattes</div>
-                            <div class="lattes-meta">
-                                <span class="lattes-meta-item"><strong>Última atualização:</strong> 31/05/2026</span>
-                                <span class="lattes-meta-item"><strong>ID Lattes:</strong> 9876543210123456</span>
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <button class="btn-primary" id="btn-print-lattes" style="background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.3); color: var(--cyan); padding: 8px 16px; border-radius: 30px; cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: var(--transition-smooth);">
+                                    <i class="fa-solid fa-print"></i> Imprimir Lattes
+                                </button>
+                                <div class="lattes-meta" style="text-align: right;">
+                                    <span class="lattes-meta-item" style="display: block;"><strong>Última atualização:</strong> 31/05/2026</span>
+                                    <span class="lattes-meta-item" style="display: block;"><strong>ID Lattes:</strong> 9876543210123456</span>
+                                </div>
                             </div>
                         </div>
                         <div class="lattes-body">

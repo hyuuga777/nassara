@@ -827,6 +827,16 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 32px;
     padding: 24px;
     animation: slideInLeft 0.5s ease;
+    background: rgba(18, 18, 24, 0.65) !important;
+    border: 1px solid rgba(0, 243, 255, 0.15) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(0, 243, 255, 0.03) !important;
+    border-radius: var(--border-radius-lg) !important;
+    transition: var(--transition-smooth) !important;
+}
+
+.timeline-item-card:hover {
+    border-color: var(--cyan) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), 0 0 20px rgba(0, 243, 255, 0.12) !important;
 }
 
 .timeline-dot {
@@ -1287,8 +1297,73 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 1024px) {
     .timeline-layout-split {
         grid-template-columns: 1fr;
-    }
 }
+
+/* ── V2 UPDATE: TIMELINE TOPBAR ── */
+.timeline-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    margin-bottom: 20px;
+    border-radius: var(--border-radius-lg);
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.timeline-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.topbar-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.timeline-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-print-timeline {
+    background: rgba(0, 243, 255, 0.08);
+    border: 1px solid rgba(0, 243, 255, 0.25);
+    color: var(--cyan);
+    padding: 8px 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition-smooth);
+}
+
+.btn-print-timeline:hover {
+    background: rgba(0, 243, 255, 0.16);
+    box-shadow: 0 0 14px rgba(0, 243, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Override btn-clear-filters width inside topbar */
+.timeline-topbar .btn-clear-filters {
+    width: auto;
+    padding: 8px 18px;
+    border-radius: 30px;
+}
+
+
 
 .timeline-filters-sidebar {
     padding: 24px;
@@ -1310,6 +1385,7 @@ h1, h2, h3, h4, h5, h6 {
     border: none;
     padding-bottom: 0;
 }
+
 
 .filter-section-title {
     font-size: 11px;
@@ -1355,8 +1431,8 @@ h1, h2, h3, h4, h5, h6 {
 .filter-chips-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    max-height: 120px;
+    gap: 8px;
+    max-height: 185px;
     overflow-y: auto;
     padding-right: 4px;
 }
@@ -1371,30 +1447,32 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .filter-chip {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 243, 255, 0.03);
+    border: 1px solid rgba(0, 243, 255, 0.08);
     color: var(--text-secondary);
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: 30px;
     font-size: 11px;
     cursor: pointer;
     transition: var(--transition-smooth);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
 }
 
 .filter-chip:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--text-primary);
-    border-color: var(--border-glass);
+    background: rgba(0, 243, 255, 0.08);
+    color: var(--cyan);
+    border-color: rgba(0, 243, 255, 0.25);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
 }
 
 .filter-chip.active {
-    background: rgba(197, 168, 128, 0.15);
-    color: var(--color-gold);
-    border-color: var(--color-gold);
-    font-weight: 500;
+    background: rgba(0, 243, 255, 0.15);
+    color: var(--cyan);
+    border-color: var(--cyan);
+    font-weight: bold;
+    box-shadow: 0 0 12px rgba(0, 243, 255, 0.2);
 }
 
 .filter-chip-count {
@@ -1953,6 +2031,115 @@ h1, h2, h3, h4, h5, h6 {
     .timeline-cat-badge {
         color: #555555 !important;
         font-weight: bold !important;
+    }
+}
+
+/* ── CLICK-TO-REVEAL SOURCE BUTTON STYLING ── */
+.item-card .timeline-link,
+.video-card .timeline-link,
+.student-item .timeline-link,
+.testimonial-card-item .timeline-link {
+    display: none !important;
+    opacity: 0;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.item-card.focused-card .timeline-link,
+.video-card.focused-card .timeline-link,
+.student-item.focused-card .timeline-link,
+.testimonial-card-item.focused-card .timeline-link {
+    display: inline-flex !important;
+    opacity: 1;
+    animation: fadeEffect 0.35s ease forwards;
+}
+
+/* ── LATTES MEDIA PRINT OVERRIDES ── */
+@media print {
+    body.printing-lattes {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: Arial, sans-serif !important;
+    }
+    
+    body.printing-lattes .sidebar-aside,
+    body.printing-lattes .content-header,
+    body.printing-lattes #btn-print-lattes,
+    body.printing-lattes #matrix-canvas,
+    body.printing-lattes .matrix-overlay,
+    body.printing-lattes .tech-bg,
+    body.printing-lattes .logo-wrapper,
+    body.printing-lattes .toast-notification,
+    body.printing-lattes .modal-backdrop {
+        display: none !important;
+    }
+    
+    body.printing-lattes .app-container {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        position: static !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+    }
+    
+    body.printing-lattes .main-content {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    
+    body.printing-lattes .view-viewport {
+        padding: 0 !important;
+        overflow: visible !important;
+        height: auto !important;
+    }
+    
+    body.printing-lattes #section-lattes {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    
+    body.printing-lattes .lattes-curriculum-wrapper {
+        border: none !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+    
+    body.printing-lattes .lattes-item {
+        border-left: 2px solid #000000 !important;
+        color: #000000 !important;
+        background: transparent !important;
+        page-break-inside: avoid;
+    }
+    
+    body.printing-lattes .lattes-section-title {
+        border-bottom: 1px solid #000000 !important;
+        color: #000000 !important;
+    }
+    
+    body.printing-lattes .lattes-section-title i {
+        color: #000000 !important;
+    }
+    
+    body.printing-lattes .lattes-header {
+        border-bottom: 2px solid #000000 !important;
+        color: #000000 !important;
+    }
+    
+    body.printing-lattes .lattes-logo {
+        color: #000000 !important;
+    }
+    
+    body.printing-lattes .lattes-meta {
+        color: #555555 !important;
     }
 }
 
