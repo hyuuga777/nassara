@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Memorial Digital Inteligente e Linha do Tempo Profissional da Dra. Nássara Mesquita. Indexador completo de cursos, eventos, prêmios e trajetória profissional de 2013 a 2026.">
+    <meta name="author" content="Buscador Biográfico Inteligente">
+    <title>Dra. Nássara Mesquita | Memorial Digital & Buscador Biográfico</title>
+    
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Local Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="dark-theme">
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar-aside" id="sidebar-nav">
+            <div class="sidebar-header">
+                <div class="logo-wrapper">
+                    <span class="logo-icon"><i class="fa-solid fa-compass-drafting"></i></span>
+                    <div class="logo-text">
+                        <span class="logo-title">MEMORIAL DIGITAL</span>
+                        <span class="logo-subtitle">Dra. Nássara Mesquita</span>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav-menu">
+                <button class="nav-item active" data-section="overview" id="btn-nav-overview">
+                    <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
+                    <span class="nav-label">Visão Geral</span>
+                </button>
+                <button class="nav-item" data-section="timeline" id="btn-nav-timeline">
+                    <span class="nav-icon"><i class="fa-solid fa-timeline"></i></span>
+                    <span class="nav-label">Linha do Tempo</span>
+                </button>
+                <button class="nav-item" data-section="lattes" id="btn-nav-lattes">
+                    <span class="nav-icon"><i class="fa-solid fa-file-invoice"></i></span>
+                    <span class="nav-label">Currículo Lattes</span>
+                </button>
+                <button class="nav-item" data-section="map" id="btn-nav-map">
+                    <span class="nav-icon"><i class="fa-solid fa-earth-americas"></i></span>
+                    <span class="nav-label">Mapa de Presença</span>
+                </button>
+                <button class="nav-item" data-section="courses" id="btn-nav-courses">
+                    <span class="nav-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+                    <span class="nav-label">Cursos & Mentorias</span>
+                </button>
+                <button class="nav-item" data-section="events" id="btn-nav-events">
+                    <span class="nav-icon"><i class="fa-solid fa-microphone"></i></span>
+                    <span class="nav-label">Eventos & Palestras</span>
+                </button>
+                <button class="nav-item" data-section="videos" id="btn-nav-videos">
+                    <span class="nav-icon"><i class="fa-solid fa-play"></i></span>
+                    <span class="nav-label">Vídeos & Podcasts</span>
+                </button>
+                <button class="nav-item" data-section="news" id="btn-nav-news">
+                    <span class="nav-icon"><i class="fa-solid fa-newspaper"></i></span>
+                    <span class="nav-label">Imprensa & Notícias</span>
+                </button>
+                <button class="nav-item" data-section="testimonials" id="btn-nav-testimonials">
+                    <span class="nav-icon"><i class="fa-solid fa-comment-dots"></i></span>
+                    <span class="nav-label">Depoimentos & Alunos</span>
+                </button>
+                <button class="nav-item" data-section="sources" id="btn-nav-sources">
+                    <span class="nav-icon"><i class="fa-solid fa-link"></i></span>
+                    <span class="nav-label">Fontes Rastreadas</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="profile-card">
+                    <div class="avatar-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                    <div class="profile-info">
+                        <span class="profile-name">Dra. Nássara Mesquita</span>
+                        <span class="profile-role">CRF-GO 9876</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="main-content">
+            <!-- Header bar with search and bio quick status -->
+            <header class="content-header">
+                <h1 class="page-title" id="main-page-title">Painel de Investigação Biográfica</h1>
+                <div class="header-actions">
+                    <div class="search-bar-wrapper">
+                        <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" id="global-search-input" placeholder="Buscar em toda a presença digital...">
+                    </div>
+                    <button class="btn-primary" id="btn-sync-pipeline">
+                        <span><i class="fa-solid fa-rotate"></i></span>
+                        <span>Buscar Atualizações</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Active View Container (Dynamic) -->
+            <div class="view-viewport" id="active-view-container">
+                
+                <!-- ── SECTION: OVERVIEW (DASHBOARD) ── -->
+                <section class="view-section active-section" id="section-overview">
+                    <!-- Bio Banner Card -->
+                    <div class="bio-banner-card glass-panel animate-fade-in">
+                        <div class="bio-banner-glow"></div>
+                        <div class="bio-banner-content">
+                            <span class="badge-gold">BIOGRAFIA VIVA</span>
+                            <h2 class="bio-name">Dra. Nássara Mesquita</h2>
+                            <p class="bio-summary" id="bio-summary-text">Carregando perfil profissional...</p>
+                            <div class="bio-quick-tags">
+                                <span class="tag-item"><i class="fa-solid fa-award"></i> Farmácia Estética</span>
+                                <span class="tag-item"><i class="fa-solid fa-syringe"></i> Referência em Toxina & Microtox</span>
+                                <span class="tag-item"><i class="fa-solid fa-location-dot"></i> Goiânia/GO</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Relevance Analytics Grid (Counters) -->
+                    <h3 class="section-subtitle">Índice de Relevância Digital & Presença Pública</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card glass-panel hover-grow animate-card-1">
+                            <div class="metric-icon color-blue"><i class="fa-solid fa-graduation-cap"></i></div>
+                            <div class="metric-data">
+                                <span class="metric-value counter-value" id="count-courses">0</span>
+                                <span class="metric-label">Cursos & Mentorias</span>
+                            </div>
+                        </div>
+                        <div class="metric-card glass-panel hover-grow animate-card-2">
+                            <div class="metric-icon color-gold"><i class="fa-solid fa-microphone"></i></div>
+                            <div class="metric-data">
+                                <span class="metric-value counter-value" id="count-events">0</span>
+                                <span class="metric-label">Eventos & Palestras</span>
+                            </div>
+                        </div>
+                        <div class="metric-card glass-panel hover-grow animate-card-3">
+                            <div class="metric-icon color-red"><i class="fa-solid fa-newspaper"></i></div>
+                            <div class="metric-data">
+                                <span class="metric-value counter-value" id="count-news">0</span>
+                                <span class="metric-label">Aparições na Imprensa</span>
+                            </div>
+                        </div>
+                        <div class="metric-card glass-panel hover-grow animate-card-4">
+                            <div class="metric-icon color-green"><i class="fa-solid fa-play"></i></div>
+                            <div class="metric-data">
+                                <span class="metric-value counter-value" id="count-videos">0</span>
+                                <span class="metric-label">Vídeos & Podcasts</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Relevance Mapping Score and Recent Activity -->
+                    <div class="dashboard-split-grid">
+                        <!-- Left Panel: Relevance Index Gauge -->
+                        <div class="dashboard-card glass-panel animate-fade-in">
+                            <div class="card-header">
+                                <h4 class="card-title">Mapa de Relevância Biográfica</h4>
+                                <span class="card-header-icon"><i class="fa-solid fa-circle-nodes"></i></span>
+                            </div>
+                            <div class="relevance-score-gauge">
+                                <div class="gauge-circle-outer">
+                                    <div class="gauge-circle-inner">
+                                        <span class="gauge-score-value" id="relevance-score-index">0</span>
+                                        <span class="gauge-score-label">Presença Pública</span>
+                                    </div>
+                                </div>
+                                <div class="relevance-score-desc">
+                                    <p>O índice de presença digital é calculado com base nas menções, cursos ministrados, prêmios científicos recebidos e engajamento em eventos setoriais.</p>
+                                    <div class="score-level-badge" id="relevance-badge">Calculando...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Quick Testimonial Carousel -->
+                        <div class="dashboard-card glass-panel animate-fade-in">
+                            <div class="card-header">
+                                <h4 class="card-title">Depoimentos & Menções Espontâneas</h4>
+                                <span class="card-header-icon"><i class="fa-solid fa-heart"></i></span>
+                            </div>
+                            <div class="testimonial-carousel" id="dashboard-testimonial-container">
+                                <div class="testimonial-slide active">
+                                    <p class="testimonial-text">"Carregando depoimentos biográficos..."</p>
+                                    <span class="testimonial-author">- Carregando...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── SECTION: TIMELINE (CHRONOLOGY V2) ── -->
+                <section class="view-section" id="section-timeline">
+                    <div class="timeline-layout-split">
+                        <!-- Advanced multi-facet filters sidebar panel -->
+                        <aside class="timeline-filters-sidebar glass-panel animate-fade-in">
+                            <div class="sidebar-filter-section">
+                                <h5 class="filter-section-title">Modo de Exibição</h5>
+                                <div class="display-mode-buttons">
+                                    <button class="display-mode-btn active" id="btn-mode-standard"><i class="fa-solid fa-grip-lines-vertical"></i> Padrão</button>
+                                    <button class="display-mode-btn" id="btn-mode-hierarchical"><i class="fa-solid fa-sitemap"></i> Hierárquico</button>
+                                </div>
+                            </div>
+                            
+                            <div class="sidebar-filter-section">
+                                <h5 class="filter-section-title">Ano</h5>
+                                <div class="filter-chips-grid" id="facet-years">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+                            </div>
+
+                            <div class="sidebar-filter-section">
+                                <h5 class="filter-section-title">Categoria Lattes</h5>
+                                <div class="filter-chips-grid" id="facet-categories">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+                            </div>
+
+                            <div class="sidebar-filter-section">
+                                <h5 class="filter-section-title">Geografia (País/Estado)</h5>
+                                <div class="filter-chips-grid" id="facet-locations">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+                            </div>
+
+                            <div class="sidebar-filter-section">
+                                <h5 class="filter-section-title">Tipo de Participação</h5>
+                                <div class="filter-chips-grid" id="facet-participation">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+                            </div>
+
+                            <div class="sidebar-filter-section">
+                                <h5 class="filter-section-title">Classificação Institucional</h5>
+                                <div class="filter-chips-grid" id="facet-institutions">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+                            </div>
+
+                            <button class="btn-clear-filters" id="btn-clear-all-filters">
+                                <i class="fa-solid fa-filter-circle-xmark"></i> Limpar Filtros
+                            </button>
+                        </aside>
+                        
+                        <!-- Timeline active area -->
+                        <div class="timeline-main-area">
+                            <div class="timeline-container animate-fade-in" id="timeline-scroll-axis">
+                                <div class="timeline-line"></div>
+                                <div class="timeline-items-wrapper" id="timeline-list-container">
+                                    <!-- Timeline Cards rendered dynamically by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── SECTION: LATTES CURRICULUM V2 ── -->
+                <section class="view-section" id="section-lattes">
+                    <div class="lattes-curriculum-wrapper glass-panel animate-fade-in">
+                        <div class="lattes-header">
+                            <div class="lattes-logo"><i class="fa-solid fa-file-invoice"></i> Currículo Lattes</div>
+                            <div class="lattes-meta">
+                                <span class="lattes-meta-item"><strong>Última atualização:</strong> 31/05/2026</span>
+                                <span class="lattes-meta-item"><strong>ID Lattes:</strong> 9876543210123456</span>
+                            </div>
+                        </div>
+                        <div class="lattes-body">
+                            <div class="lattes-summary-card">
+                                <h3>Resumo Biográfico Lattes</h3>
+                                <p>Dra. Nássara Mesquita é graduada em Farmácia com louvor pela Universidade Federal de Goiás (UFG), especialista em Farmácia Estética pelo IPUPO Estética. Atua ativamente no ensino clínico profissional de harmonização facial de alta performance e é a idealizadora de técnicas de Microtox de relevância nacional.</p>
+                            </div>
+                            
+                            <div class="lattes-section" id="lattes-sec-formacao">
+                                <h4 class="lattes-section-title"><i class="fa-solid fa-graduation-cap"></i> Formação Acadêmica / Titulação</h4>
+                                <div class="lattes-section-content" id="lattes-content-formacao">
+                                    <!-- Dynamic items -->
+                                </div>
+                            </div>
+                            
+                            <div class="lattes-section" id="lattes-sec-atuacao">
+                                <h4 class="lattes-section-title"><i class="fa-solid fa-briefcase"></i> Atuação Profissional</h4>
+                                <div class="lattes-section-content" id="lattes-content-atuacao">
+                                    <!-- Dynamic items -->
+                                </div>
+                            </div>
+                            
+                            <div class="lattes-section" id="lattes-sec-producoes">
+                                <h4 class="lattes-section-title"><i class="fa-solid fa-book"></i> Produções (Bibliográficas & Técnicas)</h4>
+                                <div class="lattes-section-content" id="lattes-content-producoes">
+                                    <!-- Dynamic items -->
+                                </div>
+                            </div>
+                            
+                            <div class="lattes-section" id="lattes-sec-eventos">
+                                <h4 class="lattes-section-title"><i class="fa-solid fa-microphone"></i> Eventos (Congressos & Palestras)</h4>
+                                <div class="lattes-section-content" id="lattes-content-eventos">
+                                    <!-- Dynamic items -->
+                                </div>
+                            </div>
+                            
+                            <div class="lattes-section" id="lattes-sec-cursos">
+                                <h4 class="lattes-section-title"><i class="fa-solid fa-chalkboard-user"></i> Cursos (Ministrados & Realizados)</h4>
+                                <div class="lattes-section-content" id="lattes-content-cursos">
+                                    <!-- Dynamic items -->
+                                </div>
+                            </div>
+                            
+                            <div class="lattes-section" id="lattes-sec-orientacoes">
+                                <h4 class="lattes-section-title"><i class="fa-solid fa-user-graduate"></i> Orientações & Mentorias</h4>
+                                <div class="lattes-section-content" id="lattes-content-orientacoes">
+                                    <!-- Dynamic items -->
+                                </div>
+                            </div>
+                            
+                            <div class="lattes-section" id="lattes-sec-certificacoes">
+                                <h4 class="lattes-section-title"><i class="fa-solid fa-award"></i> Prêmios & Certificações</h4>
+                                <div class="lattes-section-content" id="lattes-content-certificacoes">
+                                    <!-- Dynamic items -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── SECTION: INTERACTIVE PRESENCE MAP V2 ── -->
+                <section class="view-section" id="section-map">
+                    <div class="map-view-wrapper glass-panel animate-fade-in">
+                        <div class="map-controls">
+                            <span class="map-controls-label">Escopo Presencial:</span>
+                            <div class="map-toggle-buttons">
+                                <button class="map-toggle-btn active" data-scope="brasil">Brasil</button>
+                                <button class="map-toggle-btn" data-scope="latam">América Latina</button>
+                                <button class="map-toggle-btn" data-scope="world">Mundial</button>
+                            </div>
+                        </div>
+                        
+                        <div class="map-dashboard-split">
+                            <!-- SVG Stylized Presence Map -->
+                            <div class="map-visual-container">
+                                <div class="map-glow"></div>
+                                <svg class="interactive-svg-map" viewBox="0 0 800 500" id="presence-vector-map">
+                                    <rect x="0" y="0" width="100%" height="100%" fill="rgba(255,255,255,0.01)" rx="10"/>
+                                    
+                                    <!-- Stylized abstract map dots -->
+                                    <g fill="rgba(255, 255, 255, 0.05)" class="map-grid-dots">
+                                        <!-- South America Grid Dots -->
+                                        <circle cx="280" cy="180" r="3" /> <circle cx="290" cy="190" r="3" /> <circle cx="300" cy="200" r="3" />
+                                        <circle cx="290" cy="210" r="3" /> <circle cx="310" cy="220" r="3" /> <circle cx="320" cy="230" r="3" />
+                                        <circle cx="330" cy="240" r="3" /> <circle cx="340" cy="250" r="3" /> <circle cx="350" cy="260" r="3" />
+                                        <circle cx="360" cy="270" r="3" /> <circle cx="370" cy="280" r="3" /> <circle cx="380" cy="290" r="3" />
+                                        <circle cx="360" cy="310" r="3" /> <circle cx="370" cy="320" r="3" /> <circle cx="380" cy="330" r="3" />
+                                        <circle cx="390" cy="340" r="3" /> <circle cx="400" cy="350" r="3" /> <circle cx="410" cy="360" r="3" />
+                                        
+                                        <!-- Brazil Highlight Land Dots -->
+                                        <circle cx="390" cy="220" r="3.5" class="br-dot"/> <circle cx="400" cy="210" r="3.5" class="br-dot"/>
+                                        <circle cx="410" cy="200" r="3.5" class="br-dot"/> <circle cx="420" cy="190" r="3.5" class="br-dot"/>
+                                        <circle cx="430" cy="210" r="3.5" class="br-dot"/> <circle cx="440" cy="220" r="3.5" class="br-dot"/>
+                                        <circle cx="450" cy="230" r="3.5" class="br-dot"/> <circle cx="460" cy="240" r="3.5" class="br-dot"/>
+                                        <circle cx="420" cy="230" r="3.5" class="br-dot"/> <circle cx="430" cy="240" r="3.5" class="br-dot"/>
+                                        <circle cx="440" cy="250" r="3.5" class="br-dot"/> <circle cx="420" cy="260" r="3.5" class="br-dot"/>
+                                        <circle cx="430" cy="270" r="3.5" class="br-dot"/> <circle cx="410" cy="280" r="3.5" class="br-dot"/>
+                                        
+                                        <!-- Global Grid Nodes -->
+                                        <circle cx="120" cy="100" r="2" /> <circle cx="140" cy="110" r="2" /> <circle cx="160" cy="120" r="2" />
+                                        <circle cx="500" cy="90" r="2" /> <circle cx="520" cy="100" r="2" /> <circle cx="540" cy="110" r="2" />
+                                        <circle cx="560" cy="120" r="2" />
+                                    </g>
+                                    
+                                    <!-- Interactive Pulsing Geographic Marker Nodes -->
+                                    <g class="map-marker-node active" id="marker-goiania" transform="translate(420, 240)">
+                                        <circle cx="0" cy="0" r="10" class="marker-pulse" />
+                                        <circle cx="0" cy="0" r="5" class="marker-core" />
+                                    </g>
+                                    <g class="map-marker-node active" id="marker-saopaulo" transform="translate(435, 275)">
+                                        <circle cx="0" cy="0" r="10" class="marker-pulse" />
+                                        <circle cx="0" cy="0" r="5" class="marker-core" />
+                                    </g>
+                                    <g class="map-marker-node active" id="marker-miami" transform="translate(300, 130)">
+                                        <circle cx="0" cy="0" r="10" class="marker-pulse" />
+                                        <circle cx="0" cy="0" r="5" class="marker-core" />
+                                    </g>
+                                </svg>
+                                
+                                <!-- Floating Tooltip inside Map -->
+                                <div class="map-tooltip" id="map-presence-tooltip">
+                                    <h5 class="tooltip-city">Goiânia - GO</h5>
+                                    <p class="tooltip-desc">Sede principal de atuação da Dra. Nássara Mesquita.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Detailed Presence Stats panel -->
+                            <div class="map-stats-sidepanel">
+                                <h4>Detalhamento Geográfico</h4>
+                                <div class="stats-geo-cards" id="map-geo-cards-list">
+                                    <!-- Populated dynamically by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── SECTION: COURSES ── -->
+                <section class="view-section" id="section-courses">
+                    <div class="grid-layout-3" id="courses-grid-container">
+                        <!-- Course cards populated by JS -->
+                    </div>
+                </section>
+
+                <!-- ── SECTION: EVENTS ── -->
+                <section class="view-section" id="section-events">
+                    <div class="grid-layout-3" id="events-grid-container">
+                        <!-- Event cards populated by JS -->
+                    </div>
+                </section>
+
+                <!-- ── SECTION: VIDEOS ── -->
+                <section class="view-section" id="section-videos">
+                    <div class="grid-layout-2" id="videos-grid-container">
+                        <!-- Video cards populated by JS -->
+                    </div>
+                </section>
+
+                <!-- ── SECTION: NEWS ── -->
+                <section class="view-section" id="section-news">
+                    <div class="grid-layout-3" id="news-grid-container">
+                        <!-- News cards populated by JS -->
+                    </div>
+                </section>
+
+                <!-- ── SECTION: TESTIMONIALS ── -->
+                <section class="view-section" id="section-testimonials">
+                    <div class="dashboard-split-grid">
+                        <div class="dashboard-card glass-panel">
+                            <div class="card-header">
+                                <h4 class="card-title">Alunos Encontrados</h4>
+                                <span class="card-header-icon"><i class="fa-solid fa-user-graduate"></i></span>
+                            </div>
+                            <div class="students-list" id="students-list-view">
+                                <!-- Student items populated by JS -->
+                            </div>
+                        </div>
+                        <div class="dashboard-card glass-panel">
+                            <div class="card-header">
+                                <h4 class="card-title">Depoimentos Coletados</h4>
+                                <span class="card-header-icon"><i class="fa-solid fa-quote-left"></i></span>
+                            </div>
+                            <div class="testimonials-view-list" id="testimonials-list-view">
+                                <!-- Testimonials populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── SECTION: SOURCES ── -->
+                <section class="view-section" id="section-sources">
+                    <div class="sources-panel glass-panel">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Fonte / Título</th>
+                                    <th>Tipo</th>
+                                    <th>Link Original</th>
+                                    <th>Captura</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sources-table-body">
+                                <!-- Source rows populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Video & Transcription Modal (Standard high-fidelity popup) -->
+    <div class="modal-backdrop" id="transcription-modal">
+        <div class="modal-container glass-panel">
+            <div class="modal-header">
+                <h3 class="modal-title" id="transcription-modal-title">Transcrição & Sumário Avançado</h3>
+                <button class="modal-close" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-video-summary">
+                    <h4>Sumário do Vídeo</h4>
+                    <p id="transcription-modal-summary">Carregando sumário...</p>
+                </div>
+                <div class="modal-video-transcription">
+                    <h4>Transcrição Completa do Áudio (Audio Transcriber)</h4>
+                    <div class="transcription-text-box" id="transcription-modal-text">
+                        Carregando transcrição completa...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification for Sync status -->
+    <div class="toast-notification" id="toast-notif">
+        <span class="toast-icon"><i class="fa-solid fa-circle-check"></i></span>
+        <span class="toast-message" id="toast-message-text">Sincronização concluída!</span>
+    </div>
+
+    <!-- Application Logic Script -->
+    <script src="app.js"></script>
+</body>
+</html>

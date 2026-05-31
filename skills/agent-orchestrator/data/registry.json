@@ -1,0 +1,671 @@
+{
+  "generated_at": "2026-05-31T17:48:49.754954",
+  "skills_root": "Y:\\CLIENTE\\nassara\\buscador\\skills",
+  "skills": [
+    {
+      "name": "agent-manager-skill",
+      "description": "Manage multiple local CLI agents via tmux sessions (start/stop/monitor/assign) with cron-friendly scheduling.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\agent-manager-skill",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\agent-manager-skill\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "monitoring"
+      ],
+      "triggers": [
+        "monitor"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:00.661588"
+    },
+    {
+      "name": "agent-memory-systems",
+      "description": "Memory is the cornerstone of intelligent agents. Without it, every interaction starts from zero. This skill covers the architecture of agent memory: short-term (context window), long-term (vector s...",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\agent-memory-systems",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\agent-memory-systems\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "context-management"
+      ],
+      "triggers": [
+        "context",
+        "context window",
+        "memory"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:00.697858"
+    },
+    {
+      "name": "ai-agent-development",
+      "description": "AI agent development workflow for building autonomous agents, multi-agent systems, and agent orchestration with CrewAI, LangGraph, and custom agents.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\ai-agent-development",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\ai-agent-development\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:01.006601"
+    },
+    {
+      "name": "ai-agents-architect",
+      "description": "Expert in designing and building autonomous AI agents. Masters tool use, memory systems, planning strategies, and multi-agent orchestration. Use when: build agent, AI agent, autonomous agent, tool ...",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\ai-agents-architect",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\ai-agents-architect\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "context-management"
+      ],
+      "triggers": [
+        "memory"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:01.026540"
+    },
+    {
+      "name": "ai-engineer",
+      "description": "Build production-ready LLM applications, advanced RAG systems, and intelligent agents. Implements vector search, multimodal AI, agent orchestration, and enterprise AI integrations.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\ai-engineer",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\ai-engineer\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:01.062715"
+    },
+    {
+      "name": "algolia-search",
+      "description": "Expert patterns for Algolia search implementation, indexing strategies, React InstantSearch, and relevance tuning Use when: adding search to, algolia, instantsearch, search api, search functionality.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\algolia-search",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\algolia-search\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "api-integration"
+      ],
+      "triggers": [
+        "api"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:01.361396"
+    },
+    {
+      "name": "apify-audience-analysis",
+      "description": "Understand audience demographics, preferences, behavior patterns, and engagement quality across Facebook, Instagram, YouTube, and TikTok.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\apify-audience-analysis",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\apify-audience-analysis\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "social-media"
+      ],
+      "triggers": [
+        "engagement",
+        "facebook",
+        "instagram"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:02.761933"
+    },
+    {
+      "name": "apify-content-analytics",
+      "description": "Track engagement metrics, measure campaign ROI, and analyze content performance across Instagram, Facebook, YouTube, and TikTok.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\apify-content-analytics",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\apify-content-analytics\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "analytics",
+        "content-management",
+        "social-media"
+      ],
+      "triggers": [
+        "content",
+        "engagement",
+        "facebook",
+        "instagram",
+        "metrics"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:02.927022"
+    },
+    {
+      "name": "apify-ultimate-scraper",
+      "description": "Universal AI-powered web scraper for any platform. Scrape data from Instagram, Facebook, TikTok, YouTube, Google Maps, Google Search, Google Trends, Booking.com, and TripAdvisor. Use for lead gener...",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\apify-ultimate-scraper",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\apify-ultimate-scraper\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "data-extraction",
+        "social-media"
+      ],
+      "triggers": [
+        "facebook",
+        "instagram",
+        "scrape"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:03.267669"
+    },
+    {
+      "name": "architecture",
+      "description": "Architectural decision-making framework. Requirements analysis, trade-off evaluation, ADR documentation. Use when making architecture decisions or analyzing system design.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\architecture",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\architecture\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "image-generation"
+      ],
+      "triggers": [
+        "design"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:04.023589"
+    },
+    {
+      "name": "audio-transcriber",
+      "description": "Transform audio recordings into professional Markdown documentation with intelligent summaries using LLM integration",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\audio-transcriber",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\audio-transcriber\\SKILL.md",
+      "registered": false,
+      "has_scripts": true,
+      "has_references": true,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "python",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:04.321726"
+    },
+    {
+      "name": "browser-automation",
+      "description": "Browser automation powers web testing, scraping, and AI agent interactions. The difference between a flaky script and a reliable system comes down to understanding selectors, waiting strategies, an...",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\browser-automation",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\browser-automation\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "web-automation"
+      ],
+      "triggers": [
+        "browser"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:08.761080"
+    },
+    {
+      "name": "competitive-landscape",
+      "description": "This skill should be used when the user asks to \\\\\\\"analyze competitors\", \"assess competitive landscape\", \"identify differentiation\", \"evaluate market positioning\", \"apply Porter's Five Forces\",...",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\competitive-landscape",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\competitive-landscape\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:12.477310"
+    },
+    {
+      "name": "content-creator",
+      "description": "Create SEO-optimized marketing content with consistent brand voice. Includes brand voice analyzer, SEO optimizer, content frameworks, and social media templates. Use when writing blog posts, creati...",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\content-creator",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\content-creator\\SKILL.md",
+      "registered": false,
+      "has_scripts": true,
+      "has_references": true,
+      "has_data": false,
+      "capabilities": [
+        "content-management",
+        "social-media"
+      ],
+      "triggers": [
+        "content",
+        "media",
+        "social"
+      ],
+      "language": "python",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:12.890417"
+    },
+    {
+      "name": "context-manager",
+      "description": "Elite AI context engineering specialist mastering dynamic context management, vector databases, knowledge graphs, and intelligent memory systems.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\context-manager",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\context-manager\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "context-management"
+      ],
+      "triggers": [
+        "context",
+        "memory"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:13.518509"
+    },
+    {
+      "name": "data-engineer",
+      "description": "Build scalable data pipelines, modern data warehouses, and real-time streaming architectures. Implements Apache Spark, dbt, Airflow, and cloud-native data platforms.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\data-engineer",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\data-engineer\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:14.152767"
+    },
+    {
+      "name": "data-engineering-data-pipeline",
+      "description": "You are a data pipeline architecture expert specializing in scalable, reliable, and cost-effective data pipelines for batch and streaming data processing.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\data-engineering-data-pipeline",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\data-engineering-data-pipeline\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:14.192871"
+    },
+    {
+      "name": "data-visualization",
+      "description": "Data Visualization",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\data-visualization",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\data-visualization\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:14.297050"
+    },
+    {
+      "name": "database",
+      "description": "Database development and operations workflow covering SQL, NoSQL, database design, migrations, optimization, and data engineering.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\database",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\database\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "image-generation"
+      ],
+      "triggers": [
+        "design"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:14.315277"
+    },
+    {
+      "name": "database-design",
+      "description": "Database design principles and decision-making. Schema design, indexing strategy, ORM selection, serverless databases.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\database-design",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\database-design\\SKILL.md",
+      "registered": false,
+      "has_scripts": true,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "image-generation"
+      ],
+      "triggers": [
+        "design"
+      ],
+      "language": "python",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:14.521703"
+    },
+    {
+      "name": "deep-research",
+      "description": "Execute autonomous multi-step research using Google Gemini Deep Research Agent. Use for: market analysis, competitive landscaping, literature reviews, technical research, due diligence. Takes 2-10 ...",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\deep-research",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\deep-research\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:16.264910"
+    },
+    {
+      "name": "docs-architect",
+      "description": "Creates comprehensive technical documentation from existing codebases. Analyzes architecture, design patterns, and implementation details to produce long-form technical manuals and ebooks.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\docs-architect",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\docs-architect\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "image-generation"
+      ],
+      "triggers": [
+        "design"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:17.047203"
+    },
+    {
+      "name": "documentation",
+      "description": "Documentation generation workflow covering API docs, architecture docs, README files, code comments, and technical writing.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\documentation",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\documentation\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "api-integration"
+      ],
+      "triggers": [
+        "api"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:17.075555"
+    },
+    {
+      "name": "exa-search",
+      "description": "Semantic search, similar content discovery, and structured research using Exa API",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\exa-search",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\exa-search\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "api-integration",
+        "content-management"
+      ],
+      "triggers": [
+        "api",
+        "content"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:19.949231"
+    },
+    {
+      "name": "fastapi-pro",
+      "description": "Build high-performance async APIs with FastAPI, SQLAlchemy 2.0, and Pydantic V2. Master microservices, WebSockets, and modern Python async patterns.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\fastapi-pro",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\fastapi-pro\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:20.356033"
+    },
+    {
+      "name": "firecrawl-scraper",
+      "description": "Deep web scraping, screenshots, PDF parsing, and website crawling using Firecrawl API",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\firecrawl-scraper",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\firecrawl-scraper\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "api-integration"
+      ],
+      "triggers": [
+        "api"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:20.781971"
+    },
+    {
+      "name": "frontend-design",
+      "description": "Create distinctive, production-grade frontend interfaces with intentional aesthetics, high craft, and non-generic visual identity. Use when building or styling web UIs, components, pages, dashboard...",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\frontend-design",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\frontend-design\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "analytics"
+      ],
+      "triggers": [
+        "dashboard"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:21.684085"
+    },
+    {
+      "name": "frontend-developer",
+      "description": "Build React components, implement responsive layouts, and handle client-side state management. Masters React 19, Next.js 15, and modern frontend architecture.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\frontend-developer",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\frontend-developer\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:21.910283"
+    },
+    {
+      "name": "hybrid-search-implementation",
+      "description": "Combine vector and keyword search for improved retrieval. Use when implementing RAG systems, building search engines, or when neither approach alone provides sufficient recall.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\hybrid-search-implementation",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\hybrid-search-implementation\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:27.262968"
+    },
+    {
+      "name": "instagram",
+      "description": "Integracao completa com Instagram via Graph API. Publicacao, analytics, comentarios, DMs, hashtags, agendamento, templates e gestao de contas Business/Creator.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\instagram",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\instagram\\SKILL.md",
+      "registered": false,
+      "has_scripts": true,
+      "has_references": true,
+      "has_data": false,
+      "capabilities": [
+        "analytics",
+        "api-integration",
+        "social-media"
+      ],
+      "triggers": [
+        "analytics",
+        "api",
+        "graph",
+        "instagram",
+        "integracao"
+      ],
+      "language": "python",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:27.652973"
+    },
+    {
+      "name": "instagram-automation",
+      "description": "Automate Instagram tasks via Rube MCP (Composio): create posts, carousels, manage media, get insights, and publishing limits. Always search tools first for current schemas.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\instagram-automation",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\instagram-automation\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "content-management",
+        "social-media",
+        "web-automation"
+      ],
+      "triggers": [
+        "automate",
+        "instagram",
+        "media"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:28.291913"
+    },
+    {
+      "name": "linkedin-cli",
+      "description": "Use when automating LinkedIn via CLI: fetch profiles, search people/companies, send messages, manage connections, create posts, and Sales Navigator.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\linkedin-cli",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\linkedin-cli\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "messaging"
+      ],
+      "triggers": [
+        "send"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:32.520715"
+    },
+    {
+      "name": "memory-systems",
+      "description": "Design short-term, long-term, and graph-based memory architectures",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\memory-systems",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\memory-systems\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [
+        "api-integration",
+        "context-management",
+        "image-generation"
+      ],
+      "triggers": [
+        "design",
+        "graph",
+        "memory"
+      ],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:50.934250"
+    },
+    {
+      "name": "parallel-agents",
+      "description": "Multi-agent orchestration patterns. Use when multiple independent tasks can run with different domain expertise or when comprehensive analysis requires multiple perspectives.",
+      "version": "",
+      "location": "Y:\\CLIENTE\\nassara\\buscador\\skills\\parallel-agents",
+      "skill_md": "Y:\\CLIENTE\\nassara\\buscador\\skills\\parallel-agents\\SKILL.md",
+      "registered": false,
+      "has_scripts": false,
+      "has_references": false,
+      "has_data": false,
+      "capabilities": [],
+      "triggers": [],
+      "language": "none",
+      "status": "active",
+      "last_modified": "2026-03-24T22:42:54.770591"
+    }
+  ]
+}
