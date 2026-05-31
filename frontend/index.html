@@ -50,6 +50,10 @@
                     <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
                     <span class="nav-label">Visão Geral</span>
                 </button>
+                <button class="nav-item" data-section="search-config" id="btn-nav-search-config">
+                    <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span>
+                    <span class="nav-label">Parâmetros de Busca</span>
+                </button>
                 <button class="nav-item" data-section="timeline" id="btn-nav-timeline">
                     <span class="nav-icon"><i class="fa-solid fa-timeline"></i></span>
                     <span class="nav-label">Linha do Tempo</span>
@@ -203,7 +207,79 @@
                     </div>
                 </section>
 
+                <!-- ── SECTION: SEARCH CONFIG (Parâmetros de Busca) ── -->
+                <section class="view-section" id="section-search-config">
+                    <div class="search-config-wrapper animate-fade-in">
+
+                        <!-- Tab navigation -->
+                        <div class="sconfig-tabs">
+                            <button class="sconfig-tab active" data-tab="keywords">
+                                <i class="fa-solid fa-key"></i> Palavras-Chave
+                            </button>
+                            <button class="sconfig-tab" data-tab="sites">
+                                <i class="fa-solid fa-globe"></i> Sites Monitorados
+                            </button>
+                            <button class="sconfig-tab" data-tab="engines">
+                                <i class="fa-solid fa-magnifying-glass"></i> Buscadores
+                            </button>
+                        </div>
+
+                        <!-- Add new param form -->
+                        <div class="sconfig-add-form glass-panel">
+                            <h4 class="sconfig-form-title"><i class="fa-solid fa-plus"></i> Adicionar Novo Parâmetro</h4>
+                            <div class="sconfig-form-row">
+                                <select id="sconfig-type-select" class="sconfig-input">
+                                    <option value="keyword">Palavra-Chave</option>
+                                    <option value="site">Site / URL</option>
+                                    <option value="engine">Buscador</option>
+                                </select>
+                                <input type="text" id="sconfig-value-input" class="sconfig-input" placeholder="Valor (ex: Nássara Mesquita, instagram.com, Google...)">
+                                <input type="text" id="sconfig-label-input" class="sconfig-input" placeholder="Rótulo (ex: Nome completo, Instagram oficial...)">
+                                <input type="text" id="sconfig-notes-input" class="sconfig-input" placeholder="Observações (opcional)">
+                                <button class="btn-add-param" id="btn-add-search-param">
+                                    <i class="fa-solid fa-plus"></i> Adicionar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Keywords panel -->
+                        <div class="sconfig-panel active" id="sconfig-panel-keywords">
+                            <div class="sconfig-panel-header">
+                                <h4><i class="fa-solid fa-key"></i> Palavras-Chave de Busca</h4>
+                                <span class="sconfig-count" id="count-keywords">0 ativas</span>
+                            </div>
+                            <div class="sconfig-items-grid" id="sconfig-keywords-list">
+                                <div class="sconfig-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando...</div>
+                            </div>
+                        </div>
+
+                        <!-- Sites panel -->
+                        <div class="sconfig-panel" id="sconfig-panel-sites">
+                            <div class="sconfig-panel-header">
+                                <h4><i class="fa-solid fa-globe"></i> Sites Monitorados</h4>
+                                <span class="sconfig-count" id="count-sites">0 ativos</span>
+                            </div>
+                            <div class="sconfig-items-grid" id="sconfig-sites-list">
+                                <div class="sconfig-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando...</div>
+                            </div>
+                        </div>
+
+                        <!-- Engines panel -->
+                        <div class="sconfig-panel" id="sconfig-panel-engines">
+                            <div class="sconfig-panel-header">
+                                <h4><i class="fa-solid fa-magnifying-glass"></i> Buscadores Configurados</h4>
+                                <span class="sconfig-count" id="count-engines">0 ativos</span>
+                            </div>
+                            <div class="sconfig-items-grid" id="sconfig-engines-list">
+                                <div class="sconfig-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando...</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
                 <!-- ── SECTION: TIMELINE (CHRONOLOGY V2) ── -->
+
                 <section class="view-section" id="section-timeline">
                     <!-- Top bar: Display Mode Buttons -->
                     <div class="timeline-topbar glass-panel animate-fade-in">

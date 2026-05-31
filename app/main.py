@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app.database import (
     get_db, People, Sources, Events, Awards, Courses,
     Videos, News, SocialPosts, Students, Testimonials, MediaMentions,
-    Timeline, Attachments
+    Timeline, Attachments, SearchParameters
 )
 from app.schemas import RelevanceMap, TimelineItem, Student, Testimonial, Source, Course, Event, News as NewsSchema, Video
 
@@ -215,12 +215,86 @@ def get_lattes_curriculum(db: Session = Depends(get_db)):
         
     return curriculum
 
+# ── Search Parameters CRUD ────────────────────────────────────────────────
+
+@app.get("/api/search-params")
+def get_search_params(db: Session = Depends(get_db)):
+    """Return all search parameters grouped by type."""
+    params = db.query(SearchParameters).order_by(SearchParameters.type, SearchParameters.id).all()
+    result = {"keywords": [], "sites": [], "engines": []}
+    type_map = {"keyword": "keywords", "site": "sites", "engine": "engines"}
+    for p in params:
+        key = type_map.get(p.type, "keywords")
+        result[key].append({
+            "id": p.id,
+            "type": p.type,
+            "value": p.value,
+            "label": p.label,
+            "active": bool(p.active),
+            "notes": p.notes,
+            "created_at": p.created_at.isoformat() if p.created_at else None
+        })
+    return result
+
+@app.post("/api/search-params")
+def create_search_param(
+    type: str,
+    value: str,
+    label: str = None,
+    notes: str = None,
+    db: Session = Depends(get_db)
+):
+    """Create a new search parameter."""
+    from datetime import datetime
+    param = SearchParameters(
+        type=type,
+        value=value,
+        label=label or value,
+        active=1,
+        notes=notes,
+        created_at=datetime.utcnow()
+    )
+    db.add(param)
+    db.commit()
+    db.refresh(param)
+    return {"id": param.id, "type": param.type, "value": param.value, "label": param.label, "active": True}
+
+@app.put("/api/search-params/{param_id}")
+def update_search_param(
+    param_id: int,
+    value: str = None,
+    label: str = None,
+    active: int = None,
+    notes: str = None,
+    db: Session = Depends(get_db)
+):
+    """Update an existing search parameter."""
+    param = db.query(SearchParameters).filter(SearchParameters.id == param_id).first()
+    if not param:
+        raise HTTPException(status_code=404, detail="Par\u00e2metro n\u00e3o encontrado.")
+    if value is not None: param.value = value
+    if label is not None: param.label = label
+    if active is not None: param.active = active
+    if notes is not None: param.notes = notes
+    db.commit()
+    return {"id": param.id, "type": param.type, "value": param.value, "active": bool(param.active)}
+
+@app.delete("/api/search-params/{param_id}")
+def delete_search_param(param_id: int, db: Session = Depends(get_db)):
+    """Delete a search parameter."""
+    param = db.query(SearchParameters).filter(SearchParameters.id == param_id).first()
+    if not param:
+        raise HTTPException(status_code=404, detail="Par\u00e2metro n\u00e3o encontrado.")
+    db.delete(param)
+    db.commit()
+    return {"deleted": param_id}
+
 # Root landing check
 @app.get("/")
 def read_root():
     return {
         "status": "online",
-        "app": "Buscador Biográfico Inteligente - Dra. Nássara Mesquita",
+        "app": "Buscador Biogr\u00e1fico Inteligente - Dra. N\u00e1ssara Mesquita",
         "version": "1.0.0",
         "endpoints": {
             "profile": "/api/profile",
@@ -232,6 +306,7 @@ def read_root():
             "courses": "/api/courses",
             "events": "/api/events",
             "news": "/api/news",
-            "videos": "/api/videos"
+            "videos": "/api/videos",
+            "search_params": "/api/search-params"
         }
     }

@@ -41,8 +41,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     initClearFiltersButton();
     initPresenceMap();
     initMatrixRain();
-    initThemeSwitcher();
     initPrintTimelineButton();
+    initPrintLattesButton();
+    initSearchConfig();
 });
 
 async function loadSourcesMap() {
@@ -64,6 +65,19 @@ function initPrintTimelineButton() {
     if (btnPrint) {
         btnPrint.addEventListener("click", () => {
             window.print();
+        });
+    }
+}
+
+function initPrintLattesButton() {
+    const btnPrint = document.getElementById("btn-print-lattes");
+    if (btnPrint) {
+        btnPrint.addEventListener("click", () => {
+            document.body.classList.add("printing-lattes");
+            window.print();
+            setTimeout(() => {
+                document.body.classList.remove("printing-lattes");
+            }, 1000);
         });
     }
 }
@@ -131,35 +145,7 @@ function initMatrixRain() {
     matrixInterval = setInterval(draw, 33);
 }
 
-// ── Theme Switcher Control ──
-function initThemeSwitcher() {
-    const btn = document.getElementById("theme-toggle-btn");
-    if (!btn) return;
-    
-    const moonIcon = btn.querySelector(".moon-icon");
-    const sunIcon = btn.querySelector(".sun-icon");
-    
-    // Read from localStorage to persist theme selection
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light") {
-        document.body.classList.add("light-theme");
-        if (moonIcon) moonIcon.style.display = "none";
-        if (sunIcon) sunIcon.style.display = "block";
-    }
-    
-    btn.addEventListener("click", () => {
-        const isLight = document.body.classList.toggle("light-theme");
-        localStorage.setItem("theme", isLight ? "light" : "dark");
-        
-        if (isLight) {
-            if (moonIcon) moonIcon.style.display = "none";
-            if (sunIcon) sunIcon.style.display = "block";
-        } else {
-            if (moonIcon) moonIcon.style.display = "block";
-            if (sunIcon) sunIcon.style.display = "none";
-        }
-    });
-}
+
 
 // ── SPA Navigation ──
 function initNavigation() {
@@ -185,6 +171,7 @@ function switchSection(sectionId) {
 
     const titleMap = {
         "overview": "Painel de Investigação Biográfica",
+        "search-config": "Parâmetros de Busca & Monitoramento",
         "timeline": "Eixo Cronológico Profissional (2013 - 2026)",
         "lattes": "Currículo Lattes Acadêmico & Profissional",
         "map": "Mapa de Presença Geográfica Dra. Nássara Mesquita",
@@ -205,6 +192,7 @@ function switchSection(sectionId) {
     if (sectionId === "sources") loadSourcesTable();
     if (sectionId === "lattes") loadLattesCurriculum();
     if (sectionId === "map") renderPresenceMapDashboard();
+    if (sectionId === "search-config") loadSearchConfig();
 }
 
 // ── API Loaders & Rendering ──
@@ -852,6 +840,7 @@ async function loadCoursesGrid() {
                 const card = document.createElement("div");
                 card.className = "item-card glass-panel hover-grow animate-fade-in";
                 card.style.animationDelay = `${index * 0.05}s`;
+                card.style.cursor = "pointer";
                 
                 const src = sourcesMap[item.source_id];
                 const sourceHtml = src ? `<a href="${src.url}" target="_blank" class="timeline-link" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 11px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Fonte Original</a>` : "";
@@ -866,6 +855,13 @@ async function loadCoursesGrid() {
                     </div>
                     ${sourceHtml}
                 `;
+
+                // Toggle source button on card click
+                card.addEventListener("click", (e) => {
+                    if (e.target.closest("a") || e.target.closest("button")) return;
+                    card.classList.toggle("focused-card");
+                });
+
                 container.appendChild(card);
             });
         }
@@ -887,6 +883,7 @@ async function loadEventsGrid() {
                 const card = document.createElement("div");
                 card.className = "item-card glass-panel hover-grow animate-fade-in";
                 card.style.animationDelay = `${index * 0.05}s`;
+                card.style.cursor = "pointer";
                 
                 const src = sourcesMap[item.source_id];
                 const sourceHtml = src ? `<a href="${src.url}" target="_blank" class="timeline-link" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 11px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Fonte Original</a>` : "";
@@ -901,6 +898,13 @@ async function loadEventsGrid() {
                     </div>
                     ${sourceHtml}
                 `;
+
+                // Toggle source button on card click
+                card.addEventListener("click", (e) => {
+                    if (e.target.closest("a") || e.target.closest("button")) return;
+                    card.classList.toggle("focused-card");
+                });
+
                 container.appendChild(card);
             });
         }
@@ -922,6 +926,7 @@ async function loadVideosGrid() {
                 const card = document.createElement("div");
                 card.className = "video-card glass-panel hover-grow animate-fade-in";
                 card.style.animationDelay = `${index * 0.05}s`;
+                card.style.cursor = "pointer";
                 
                 const srcHtml = item.url ? `<a href="${item.url}" target="_blank" class="timeline-link" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 11px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Canal Original</a>` : "";
 
@@ -937,6 +942,13 @@ async function loadVideosGrid() {
                     </div>
                     ${srcHtml}
                 `;
+
+                // Toggle source button on card click
+                card.addEventListener("click", (e) => {
+                    if (e.target.closest("a") || e.target.closest("button") || e.target.closest(".video-thumb-play")) return;
+                    card.classList.toggle("focused-card");
+                });
+
                 container.appendChild(card);
             });
 
@@ -960,6 +972,7 @@ async function loadNewsGrid() {
                 const card = document.createElement("div");
                 card.className = "item-card glass-panel hover-grow animate-fade-in";
                 card.style.animationDelay = `${index * 0.05}s`;
+                card.style.cursor = "pointer";
                 
                 const newsUrl = item.url || (sourcesMap[item.source_id] ? sourcesMap[item.source_id].url : "");
                 const sourceHtml = newsUrl ? `<a href="${newsUrl}" target="_blank" class="timeline-link" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 11px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Notícia Completa</a>` : "";
@@ -974,6 +987,13 @@ async function loadNewsGrid() {
                     </div>
                     ${sourceHtml}
                 `;
+
+                // Toggle source button on card click
+                card.addEventListener("click", (e) => {
+                    if (e.target.closest("a") || e.target.closest("button")) return;
+                    card.classList.toggle("focused-card");
+                });
+
                 container.appendChild(card);
             });
         }
@@ -1251,4 +1271,230 @@ function getMonthName(monthNum) {
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ];
     return months[parseInt(monthNum) - 1] || "Dezembro";
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SEARCH CONFIG MODULE  (Parâmetros de Busca)
+// ══════════════════════════════════════════════════════════════════════
+
+let searchConfigData = { keywords: [], sites: [], engines: [] };
+
+const TYPE_ICONS = {
+    keyword: 'fa-key',
+    site: 'fa-globe',
+    engine: 'fa-magnifying-glass'
+};
+
+function initSearchConfig() {
+    // Tab switching
+    const tabs = document.querySelectorAll('.sconfig-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const target = tab.getAttribute('data-tab');
+            document.querySelectorAll('.sconfig-panel').forEach(p => p.classList.remove('active'));
+            const panel = document.getElementById(`sconfig-panel-${target}`);
+            if (panel) panel.classList.add('active');
+        });
+    });
+
+    // Add button
+    const btnAdd = document.getElementById('btn-add-search-param');
+    if (btnAdd) {
+        btnAdd.addEventListener('click', addSearchParam);
+    }
+
+    // Enter key on inputs
+    ['sconfig-value-input', 'sconfig-label-input', 'sconfig-notes-input'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') addSearchParam(); });
+    });
+}
+
+async function loadSearchConfig() {
+    try {
+        const resp = await fetch(`${API_BASE_URL}/api/search-params`);
+        if (!resp.ok) throw new Error('API error');
+        searchConfigData = await resp.json();
+        renderSearchConfigPanel('keywords');
+        renderSearchConfigPanel('sites');
+        renderSearchConfigPanel('engines');
+    } catch (e) {
+        // If API has no data yet, seed with defaults
+        if (searchConfigData.keywords.length === 0) {
+            searchConfigData = getDefaultSearchParams();
+        }
+        renderSearchConfigPanel('keywords');
+        renderSearchConfigPanel('sites');
+        renderSearchConfigPanel('engines');
+        console.warn('Usando parâmetros padrão (API offline):', e);
+    }
+}
+
+function getDefaultSearchParams() {
+    return {
+        keywords: [
+            { id: -1, type: 'keyword', value: 'Nássara Mesquita', label: 'Nome principal', active: true, notes: 'Variação mais comum nas buscas' },
+            { id: -2, type: 'keyword', value: 'Nássara Borges Mesquita Oliveira', label: 'Nome completo (Lattes)', active: true, notes: 'Conforme registrado no Currículo Lattes' },
+            { id: -3, type: 'keyword', value: 'Nassara Mesquita farmacêutica', label: 'Nome + profissão', active: true, notes: '' },
+            { id: -4, type: 'keyword', value: 'Nassara Mesquita harmonização facial', label: 'Nome + especialidade', active: true, notes: '' },
+            { id: -5, type: 'keyword', value: 'Nassara Mesquita Goiânia', label: 'Nome + cidade', active: true, notes: '' },
+            { id: -6, type: 'keyword', value: 'Nassara Mesquita Microtox', label: 'Nome + técnica Microtox', active: true, notes: '' },
+            { id: -7, type: 'keyword', value: 'OLIVEIRA, N. B. M.', label: 'Citação bibliográfica Lattes', active: true, notes: 'Formato usado em produções científicas' },
+        ],
+        sites: [
+            { id: -10, type: 'site', value: 'lattes.cnpq.br', label: 'Lattes CNPq', active: true, notes: 'ID: 7120531705115048' },
+            { id: -11, type: 'site', value: 'instagram.com/nassaramesquita', label: 'Instagram Oficial', active: true, notes: 'Principal canal de conteúdo' },
+            { id: -12, type: 'site', value: 'escavador.com', label: 'Escavador', active: true, notes: 'Indexador acadêmico público' },
+            { id: -13, type: 'site', value: 'linkedin.com', label: 'LinkedIn', active: true, notes: 'Perfil profissional' },
+            { id: -14, type: 'site', value: 'sympla.com.br', label: 'Sympla', active: true, notes: 'Plataforma de eventos e cursos' },
+            { id: -15, type: 'site', value: 'youtube.com', label: 'YouTube', active: true, notes: 'Vídeos e palestras' },
+            { id: -16, type: 'site', value: 'crfgo.org.br', label: 'CRF-GO', active: true, notes: 'Conselho Regional de Farmácia - GO' },
+        ],
+        engines: [
+            { id: -20, type: 'engine', value: 'Google Search', label: 'Google', active: true, notes: 'Principal motor de busca' },
+            { id: -21, type: 'engine', value: 'Google Scholar', label: 'Google Acadêmico', active: true, notes: 'Para produções científicas' },
+            { id: -22, type: 'engine', value: 'Bing', label: 'Bing', active: false, notes: '' },
+            { id: -23, type: 'engine', value: 'YouTube Search', label: 'YouTube', active: true, notes: 'Para vídeos e podcasts' },
+        ]
+    };
+}
+
+function renderSearchConfigPanel(type) {
+    const listEl = document.getElementById(`sconfig-${type}-list`);
+    const countEl = document.getElementById(`count-${type}`);
+    if (!listEl) return;
+
+    const items = searchConfigData[type] || [];
+    const activeCount = items.filter(i => i.active).length;
+
+    if (countEl) countEl.textContent = `${activeCount} ativo${activeCount !== 1 ? 's' : ''}`;
+
+    if (items.length === 0) {
+        listEl.innerHTML = `<div class="sconfig-empty"><i class="fa-solid fa-${TYPE_ICONS[type.slice(0,-1)] || 'circle-info'}"></i>Nenhum parâmetro cadastrado.</div>`;
+        return;
+    }
+
+    listEl.innerHTML = '';
+    items.forEach(item => {
+        const singularType = type === 'keywords' ? 'keyword' : type === 'sites' ? 'site' : 'engine';
+        const icon = TYPE_ICONS[singularType] || 'circle';
+        const div = document.createElement('div');
+        div.className = `sconfig-item${item.active ? '' : ' inactive'}`;
+        div.setAttribute('data-id', item.id);
+        div.innerHTML = `
+            <div class="sconfig-item-icon"><i class="fa-solid fa-${icon}"></i></div>
+            <div class="sconfig-item-body">
+                <div class="sconfig-item-value">${item.value}</div>
+                <div class="sconfig-item-label">${item.label || ''}</div>
+                ${item.notes ? `<div class="sconfig-item-notes">${item.notes}</div>` : ''}
+            </div>
+            <div class="sconfig-item-actions">
+                <button class="sconfig-btn toggle-btn ${item.active ? 'active-state' : ''}" data-id="${item.id}" data-type="${type}" data-active="${item.active ? 1 : 0}" title="${item.active ? 'Desativar' : 'Ativar'}">
+                    <i class="fa-solid fa-${item.active ? 'eye' : 'eye-slash'}"></i>
+                    ${item.active ? 'Ativo' : 'Inativo'}
+                </button>
+                <button class="sconfig-btn delete-btn" data-id="${item.id}" data-type="${type}" title="Remover">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        `;
+        listEl.appendChild(div);
+    });
+
+    // Bind toggle buttons
+    listEl.querySelectorAll('.toggle-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = parseInt(btn.getAttribute('data-id'));
+            const panelType = btn.getAttribute('data-type');
+            const currentActive = parseInt(btn.getAttribute('data-active'));
+            const newActive = currentActive === 1 ? 0 : 1;
+            
+            // Update local state
+            const arr = searchConfigData[panelType];
+            const idx = arr.findIndex(i => i.id === id);
+            if (idx !== -1) arr[idx].active = newActive === 1;
+            renderSearchConfigPanel(panelType);
+            
+            // Sync to API (if positive ID = real DB record)
+            if (id > 0) {
+                try {
+                    await fetch(`${API_BASE_URL}/api/search-params/${id}?active=${newActive}`, { method: 'PUT' });
+                } catch (e) { /* offline */ }
+            }
+            showToast(newActive ? 'Parâmetro ativado!' : 'Parâmetro desativado!');
+        });
+    });
+
+    // Bind delete buttons
+    listEl.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = parseInt(btn.getAttribute('data-id'));
+            const panelType = btn.getAttribute('data-type');
+            
+            searchConfigData[panelType] = searchConfigData[panelType].filter(i => i.id !== id);
+            renderSearchConfigPanel(panelType);
+            
+            if (id > 0) {
+                try {
+                    await fetch(`${API_BASE_URL}/api/search-params/${id}`, { method: 'DELETE' });
+                } catch (e) { /* offline */ }
+            }
+            showToast('Parâmetro removido!');
+        });
+    });
+}
+
+async function addSearchParam() {
+    const typeEl = document.getElementById('sconfig-type-select');
+    const valueEl = document.getElementById('sconfig-value-input');
+    const labelEl = document.getElementById('sconfig-label-input');
+    const notesEl = document.getElementById('sconfig-notes-input');
+
+    const type = typeEl.value;
+    const value = valueEl.value.trim();
+    const label = labelEl.value.trim();
+    const notes = notesEl.value.trim();
+
+    if (!value) {
+        showToast('Informe um valor para o parâmetro!');
+        return;
+    }
+
+    const panelType = type === 'keyword' ? 'keywords' : type === 'site' ? 'sites' : 'engines';
+    const tempId = -(Date.now()); // negative temp ID
+
+    const newItem = { id: tempId, type, value, label: label || value, active: true, notes };
+    searchConfigData[panelType].push(newItem);
+    renderSearchConfigPanel(panelType);
+
+    // Clear form
+    valueEl.value = '';
+    labelEl.value = '';
+    notesEl.value = '';
+
+    // Activate the correct tab
+    document.querySelectorAll('.sconfig-tab').forEach(t => {
+        t.classList.toggle('active', t.getAttribute('data-tab') === panelType);
+    });
+    document.querySelectorAll('.sconfig-panel').forEach(p => {
+        p.classList.toggle('active', p.id === `sconfig-panel-${panelType}`);
+    });
+
+    // Sync to API
+    try {
+        const url = `${API_BASE_URL}/api/search-params?type=${encodeURIComponent(type)}&value=${encodeURIComponent(value)}&label=${encodeURIComponent(label || value)}&notes=${encodeURIComponent(notes)}`;
+        const resp = await fetch(url, { method: 'POST' });
+        if (resp.ok) {
+            const saved = await resp.json();
+            // Replace temp ID with real DB ID
+            const arr = searchConfigData[panelType];
+            const idx = arr.findIndex(i => i.id === tempId);
+            if (idx !== -1) arr[idx].id = saved.id;
+            showToast('Parâmetro adicionado e sincronizado!');
+        }
+    } catch (e) {
+        showToast('Parâmetro adicionado (modo offline).');
+    }
 }

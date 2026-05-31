@@ -289,6 +289,17 @@ class Attachments(Base):
     
     timeline = relationship("Timeline", back_populates="attachments")
 
+class SearchParameters(Base):
+    """Stores search configuration: keywords, target sites, and search engines used for biography research."""
+    __tablename__ = "search_parameters"
+    id = Column(Integer, primary_key=True, index=True)
+    type = Column(String(50), nullable=False)  # 'keyword', 'site', 'engine'
+    value = Column(String(500), nullable=False)
+    label = Column(String(200), nullable=True)  # human-readable label
+    active = Column(Integer, default=1)  # 1=active, 0=inactive
+    created_at = Column(DateTime, default=datetime.utcnow)
+    notes = Column(Text, nullable=True)
+
 # ── Database Initialization ───────────────────────────────────────────────
 
 def init_db():
