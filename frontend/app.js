@@ -8,6 +8,7 @@ let timelineData = [];
 let relevanceData = {};
 let currentSection = "overview";
 let displayMode = "standard"; // "standard" or "hierarchical"
+let sourcesMap = {}; // Global map linking source_id -> Source object
 
 // Client-Side Facet State
 let selectedYear = null;
@@ -26,8 +27,9 @@ const modal = document.getElementById("transcription-modal");
 const btnCloseModal = document.getElementById("btn-close-modal");
 
 // ── Application Initialization ──
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     initNavigation();
+    await loadSourcesMap();
     loadProfile();
     loadRelevanceMetrics();
     loadDashboardTestimonials();
@@ -40,7 +42,31 @@ document.addEventListener("DOMContentLoaded", () => {
     initPresenceMap();
     initMatrixRain();
     initThemeSwitcher();
+    initPrintTimelineButton();
 });
+
+async function loadSourcesMap() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/sources`);
+        if (response.ok) {
+            const data = await response.json();
+            data.forEach(src => {
+                sourcesMap[src.id] = src;
+            });
+        }
+    } catch (e) {
+        console.error("Erro ao carregar mapa de fontes:", e);
+    }
+}
+
+function initPrintTimelineButton() {
+    const btnPrint = document.getElementById("btn-print-timeline");
+    if (btnPrint) {
+        btnPrint.addEventListener("click", () => {
+            window.print();
+        });
+    }
+}
 
 // ── Matrix Rain Visual Engine ──
 let matrixInterval = null;
@@ -720,20 +746,31 @@ function renderPresenceMapDashboard() {
     filteredCities.forEach(c => {
         const card = document.createElement("div");
         card.className = "geo-card";
+        card.style.cursor = "pointer";
         card.innerHTML = `
             <div class="geo-card-header">
                 <span class="geo-card-title">${c.city} - ${c.state}</span>
                 <span class="geo-card-stat">${c.itemsCount} ${c.itemsCount === 1 ? 'Registro' : 'Registros'}</span>
             </div>
-            <div class="geo-card-detail">
+            <div class="geo-card-detail" style="margin-bottom: 8px;">
                 ${c.details.slice(0, 3).map(d => `• ${d}`).join('<br>')}
                 ${c.details.length > 3 ? `<br>• e mais ${c.details.length - 3} registros...` : ''}
             </div>
+            <span class="timeline-link" style="font-size: 11px; display: inline-flex; align-items: center; gap: 4px; pointer-events: none;"><i class="fa-solid fa-circle-info"></i> Explorar Fontes no Eixo Cronológico</span>
         `;
 
         // Setup marker highlights on card hover
         card.addEventListener("mouseenter", () => {
             highlightMarker(c.city.toLowerCase());
+        });
+
+        // Click handler to route and filter timeline dynamically
+        card.addEventListener("click", () => {
+            selectedLocation = `${c.city}/${c.state}`;
+            const navTimelineBtn = document.getElementById("btn-nav-timeline");
+            if (navTimelineBtn) {
+                navTimelineBtn.click();
+            }
         });
 
         listContainer.appendChild(card);
@@ -815,14 +852,19 @@ async function loadCoursesGrid() {
                 const card = document.createElement("div");
                 card.className = "item-card glass-panel hover-grow animate-fade-in";
                 card.style.animationDelay = `${index * 0.05}s`;
+                
+                const src = sourcesMap[item.source_id];
+                const sourceHtml = src ? `<a href="${src.url}" target="_blank" class="timeline-link" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 11px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Fonte Original</a>` : "";
+
                 card.innerHTML = `
                     <span class="badge-gold">${item.role === 'instructor' ? 'CURSO MINISTRADO' : 'REALIZADO'}</span>
                     <h4 class="item-title">${item.title}</h4>
                     <p class="item-desc">${item.description || ''}</p>
-                    <div class="card-footer-info">
+                    <div class="card-footer-info" style="margin-bottom: 4px;">
                         <span><i class="fa-solid fa-calendar"></i> ${item.date || ''}</span>
                         <span><i class="fa-solid fa-location-dot"></i> ${item.location || ''}</span>
                     </div>
+                    ${sourceHtml}
                 `;
                 container.appendChild(card);
             });
@@ -845,14 +887,19 @@ async function loadEventsGrid() {
                 const card = document.createElement("div");
                 card.className = "item-card glass-panel hover-grow animate-fade-in";
                 card.style.animationDelay = `${index * 0.05}s`;
+                
+                const src = sourcesMap[item.source_id];
+                const sourceHtml = src ? `<a href="${src.url}" target="_blank" class="timeline-link" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 11px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Fonte Original</a>` : "";
+
                 card.innerHTML = `
                     <span class="badge-gold">CONGRESSO / WORKSHOP</span>
                     <h4 class="item-title">${item.name}</h4>
                     <p class="item-desc">${item.description || ''}</p>
-                    <div class="card-footer-info">
+                    <div class="card-footer-info" style="margin-bottom: 4px;">
                         <span><i class="fa-solid fa-calendar"></i> ${item.date || ''}</span>
                         <span><i class="fa-solid fa-location-dot"></i> ${item.location || ''}</span>
                     </div>
+                    ${sourceHtml}
                 `;
                 container.appendChild(card);
             });
@@ -875,16 +922,20 @@ async function loadVideosGrid() {
                 const card = document.createElement("div");
                 card.className = "video-card glass-panel hover-grow animate-fade-in";
                 card.style.animationDelay = `${index * 0.05}s`;
+                
+                const srcHtml = item.url ? `<a href="${item.url}" target="_blank" class="timeline-link" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 11px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Canal Original</a>` : "";
+
                 card.innerHTML = `
                     <div class="video-thumb-placeholder">
                         <div class="video-thumb-play btn-view-transcription" data-id="${item.id}"><i class="fa-solid fa-play"></i></div>
                     </div>
                     <h4 class="item-title">${item.title}</h4>
                     <p class="item-desc">${item.summary || ''}</p>
-                    <div class="card-footer-info" style="border:none; padding-top:0;">
+                    <div class="card-footer-info" style="border:none; padding-top:0; margin-bottom: 4px;">
                         <span><i class="fa-solid fa-clock"></i> ${item.duration || '45m'}</span>
                         <button class="btn-secondary btn-view-transcription" data-id="${item.id}">Ver Transcrição</button>
                     </div>
+                    ${srcHtml}
                 `;
                 container.appendChild(card);
             });
@@ -909,14 +960,19 @@ async function loadNewsGrid() {
                 const card = document.createElement("div");
                 card.className = "item-card glass-panel hover-grow animate-fade-in";
                 card.style.animationDelay = `${index * 0.05}s`;
+                
+                const newsUrl = item.url || (sourcesMap[item.source_id] ? sourcesMap[item.source_id].url : "");
+                const sourceHtml = newsUrl ? `<a href="${newsUrl}" target="_blank" class="timeline-link" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 11px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Notícia Completa</a>` : "";
+
                 card.innerHTML = `
                     <span class="badge-gold">NOTÍCIA / IMPRENSA</span>
                     <h4 class="item-title">${item.title}</h4>
                     <p class="item-desc">${item.summary || ''}</p>
-                    <div class="card-footer-info">
+                    <div class="card-footer-info" style="margin-bottom: 4px;">
                         <span><i class="fa-solid fa-newspaper"></i> ${item.publisher || ''}</span>
                         <span><i class="fa-solid fa-calendar"></i> ${item.date || ''}</span>
                     </div>
+                    ${sourceHtml}
                 `;
                 container.appendChild(card);
             });
@@ -938,11 +994,16 @@ async function loadTestimonialsSection() {
             data.forEach(item => {
                 const itemDiv = document.createElement("div");
                 itemDiv.className = "student-item";
+                
+                const src = sourcesMap[item.source_id];
+                const sourceHtml = src ? `<a href="${src.url}" target="_blank" class="timeline-link" style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; margin-top: 4px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Fonte</a>` : "";
+
                 itemDiv.innerHTML = `
                     <div class="student-avatar"><i class="fa-solid fa-user-graduate"></i></div>
                     <div class="student-meta">
                         <span class="student-name">${item.name}</span>
                         <span class="student-course">Harmonização Avançada</span>
+                        ${sourceHtml}
                     </div>
                 `;
                 container.appendChild(itemDiv);
@@ -958,9 +1019,16 @@ async function loadTestimonialsSection() {
             data.forEach(item => {
                 const itemDiv = document.createElement("div");
                 itemDiv.className = "testimonial-card-item";
+                
+                const src = sourcesMap[item.source_id];
+                const sourceHtml = src ? `<a href="${src.url}" target="_blank" class="timeline-link" style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; margin-top: 6px; float: left;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Fonte</a>` : "";
+
                 itemDiv.innerHTML = `
                     <p>"${item.content}"</p>
-                    <div class="testimonial-card-author">${item.author} (${translateRelation(item.relation)})</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                        ${sourceHtml}
+                        <div class="testimonial-card-author" style="margin: 0; width: auto;">${item.author} (${translateRelation(item.relation)})</div>
+                    </div>
                 `;
                 container.appendChild(itemDiv);
             });
@@ -995,6 +1063,18 @@ async function loadSourcesTable() {
     }
 }
 
+// YouTube URL extractor utility
+function getYouTubeEmbedUrl(url) {
+    if (!url) return null;
+    let videoId = null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) {
+        videoId = match[2];
+    }
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+}
+
 // ── Dynamic Video Modal Open ──
 async function openTranscriptionModal(videoId) {
     try {
@@ -1007,6 +1087,17 @@ async function openTranscriptionModal(videoId) {
                 document.getElementById("transcription-modal-summary").textContent = video.summary;
                 document.getElementById("transcription-modal-text").textContent = video.transcription;
 
+                // Load YouTube embed player
+                const embedUrl = getYouTubeEmbedUrl(video.url);
+                const playerContainer = document.getElementById("modal-video-player-container");
+                if (embedUrl) {
+                    playerContainer.innerHTML = `<iframe width="100%" height="340" src="${embedUrl}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; border: none;"></iframe>`;
+                    playerContainer.style.display = "block";
+                } else {
+                    playerContainer.innerHTML = "";
+                    playerContainer.style.display = "none";
+                }
+
                 modal.classList.add("active");
             }
         }
@@ -1018,11 +1109,13 @@ async function openTranscriptionModal(videoId) {
 function initModalClose() {
     btnCloseModal.addEventListener("click", () => {
         modal.classList.remove("active");
+        document.getElementById("modal-video-player-container").innerHTML = ""; // Stop video playback
     });
 
     modal.addEventListener("click", (e) => {
         if (e.target === modal) {
             modal.classList.remove("active");
+            document.getElementById("modal-video-player-container").innerHTML = ""; // Stop video playback
         }
     });
 }

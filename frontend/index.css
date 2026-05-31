@@ -1847,3 +1847,112 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(-1px);
 }
 
+.btn-print-timeline:hover {
+    background: rgba(0, 243, 255, 0.2) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.15);
+}
+
+/* ── V2 UPDATE: PRINTING STYLING SYSTEM ── */
+@media print {
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: Arial, sans-serif !important;
+    }
+    
+    /* Hide all interactive navigation, theme, search, and video canvas elements */
+    .sidebar-aside, 
+    .content-header, 
+    .timeline-filters-sidebar, 
+    #matrix-canvas, 
+    .matrix-overlay, 
+    .tech-bg,
+    .btn-sync-pipeline,
+    .btn-clear-filters,
+    .btn-print-timeline,
+    .toast-notification,
+    .modal-backdrop,
+    .timeline-link,
+    .evidence-badge,
+    .logo-wrapper {
+        display: none !important;
+    }
+    
+    /* Force main timeline scroll axis and layout to stretch to full width on paper */
+    .app-container {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        position: static !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+    }
+    
+    .main-content {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    
+    .view-viewport {
+        padding: 20px !important;
+        overflow: visible !important;
+        height: auto !important;
+    }
+    
+    .timeline-layout-split {
+        display: block !important;
+    }
+    
+    .timeline-main-area {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .timeline-line, .timeline-dot {
+        display: none !important;
+    }
+    
+    .timeline-item-card {
+        page-break-inside: avoid;
+        margin-left: 0 !important;
+        margin-bottom: 20px !important;
+        padding: 20px !important;
+        background: #ffffff !important;
+        border: 1px solid #dddddd !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        border-radius: 8px !important;
+    }
+    
+    .timeline-title {
+        color: #000000 !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+    }
+    
+    .timeline-desc {
+        color: #333333 !important;
+        font-size: 12px !important;
+    }
+    
+    .timeline-year-badge {
+        background: #000000 !important;
+        color: #ffffff !important;
+        font-weight: bold !important;
+        border: none !important;
+        padding: 2px 8px !important;
+    }
+    
+    .timeline-cat-badge {
+        color: #555555 !important;
+        font-weight: bold !important;
+    }
+}
+
