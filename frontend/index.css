@@ -1,21 +1,38 @@
-/* ── Premium Glassmorphism Design System ── */
+/* ── Cyberpunk Design System ── */
 
 :root {
-    /* Color Palette */
-    --bg-app: hsl(222, 25%, 7%);
-    --bg-sidebar: hsl(222, 25%, 5%);
-    --bg-card: rgba(18, 25, 41, 0.5);
-    --border-glass: rgba(197, 168, 128, 0.15);
+    /* Cyberpunk Color Palette from agenciacyborg.com/base/ */
+    --bg-color: #070709;
+    --bg-darker: #040405;
+    --card-bg: rgba(18, 18, 24, 0.65);
+    --card-bg-hover: rgba(26, 26, 34, 0.85);
+    --border-color: rgba(255, 255, 255, 0.07);
+    --border-color-glow: rgba(0, 243, 255, 0.25);
     
-    --color-gold: hsl(36, 45%, 63%);
-    --color-gold-hover: hsl(36, 45%, 73%);
-    --color-blue: hsl(210, 85%, 53%);
-    --color-green: hsl(145, 65%, 45%);
-    --color-red: hsl(355, 75%, 55%);
+    --cyan: #00f3ff;
+    --cyan-glow: rgba(0, 243, 255, 0.4);
+    --purple: #aa00ff;
+    --purple-glow: rgba(170, 0, 255, 0.3);
     
-    --text-primary: hsl(210, 15%, 96%);
-    --text-secondary: hsl(210, 10%, 75%);
-    --text-muted: hsl(210, 8%, 55%);
+    /* Core Theme Mappings to preserve existing layout rules */
+    --bg-app: var(--bg-color);
+    --bg-sidebar: var(--bg-darker);
+    --bg-card: var(--card-bg);
+    --border-glass: var(--border-color);
+    
+    --color-gold: var(--cyan);
+    --color-gold-hover: #00e1ec;
+    --color-blue: var(--cyan);
+    --color-green: #39ff14; /* Neon green */
+    --color-red: #ff0055;   /* Neon magenta */
+    
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e6;
+    --text-muted: #888894;
+    
+    --accent-gradient: linear-gradient(135deg, #00f3ff 0%, #aa00ff 100%);
+    --font-title: 'Audiowide', cursive, sans-serif;
+    --font-body: 'Montserrat', sans-serif;
     
     /* Layout & Margins */
     --sidebar-width: 280px;
@@ -25,6 +42,172 @@
     
     /* Transition Variables */
     --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* Matrix effect variables */
+    --matrix-color: #aa00ff;
+    --matrix-glow-color: #aa00ffbc;
+    --matrix-bg-opacity: 0.82;
+}
+
+/* --- Tech Animated Background Grid --- */
+.tech-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    background-color: var(--bg-color);
+    overflow: hidden;
+    pointer-events: none;
+}
+.tech-grid {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background-image: 
+      linear-gradient(rgba(0, 243, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 243, 255, 0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: perspective(600px) rotateX(60deg);
+    animation: grid-move 22s linear infinite;
+}
+@keyframes grid-move {
+    0% {
+        transform: perspective(600px) rotateX(60deg) translateY(0);
+    }
+    100% {
+        transform: perspective(600px) rotateX(60deg) translateY(50px);
+    }
+}
+
+/* --- Matrix Rain Canvas --- */
+#matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+    display: block;
+}
+.matrix-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    opacity: var(--matrix-bg-opacity, 0.82);
+    z-index: 2;
+    pointer-events: none;
+    display: block;
+    transition: opacity 0.3s ease;
+}
+
+/* --- Cyberpunk Branding --- */
+.logo-gif-container {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--cyan);
+    box-shadow: 0 0 15px var(--cyan-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    transition: var(--transition-smooth);
+}
+.logo-gif-container:hover {
+    transform: rotate(5deg) scale(1.05);
+    box-shadow: 0 0 25px var(--cyan-glow), 0 0 10px var(--purple-glow);
+    border-color: var(--purple);
+}
+.brand-logo-gif {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- Theme Toggle Button --- */
+.theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-glass);
+    color: var(--cyan);
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.02);
+    transition: var(--transition-smooth);
+    outline: none;
+}
+.theme-toggle-btn:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan-glow), inset 0 0 10px rgba(0, 243, 255, 0.05);
+    transform: scale(1.05);
+}
+.theme-toggle-btn:active {
+    transform: scale(0.95);
+}
+.theme-icon {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    display: block;
+}
+
+/* --- Light Mode Redesign --- */
+body.light-theme {
+    --bg-color: #f5f5f7;
+    --bg-darker: #eef2f5;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --card-bg-hover: rgba(255, 255, 255, 0.95);
+    --border-color: rgba(0, 0, 0, 0.08);
+    --border-color-glow: rgba(170, 0, 255, 0.25);
+    
+    --cyan: #aa00ff; /* Purple accent in the day */
+    --cyan-glow: rgba(170, 0, 255, 0.25);
+    --purple: #00f3ff; /* Cyan accent */
+    --purple-glow: rgba(0, 243, 255, 0.2);
+    
+    --text-primary: #1d1d1f;
+    --text-secondary: #424245;
+    --text-muted: #86868b;
+    
+    --matrix-bg-opacity: 0.92;
+}
+body.light-theme .matrix-overlay {
+    background-color: #f5f5f7 !important;
+}
+body.light-theme .sidebar-aside {
+    background-color: rgba(238, 242, 245, 0.85);
+}
+body.light-theme .content-header {
+    background-color: rgba(245, 245, 247, 0.8);
+}
+body.light-theme .tag-item {
+    background-color: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.03);
+}
+body.light-theme #global-search-input {
+    background-color: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #1d1d1f;
+}
+body.light-theme #global-search-input:focus {
+    background-color: #ffffff;
+    border-color: var(--cyan);
+    box-shadow: 0 0 15px rgba(170, 0, 255, 0.15);
 }
 
 /* ── Reset & Globals ── */
@@ -37,13 +220,13 @@
 body {
     background-color: var(--bg-app);
     color: var(--text-primary);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     overflow-x: hidden;
     height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--font-title);
     font-weight: 600;
     color: var(--text-primary);
 }
@@ -54,12 +237,17 @@ h1, h2, h3, h4, h5, h6 {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    position: relative;
+    z-index: 5;
+    background: transparent;
 }
 
 /* ── Sidebar Style ── */
 .sidebar-aside {
     width: var(--sidebar-width);
-    background-color: var(--bg-sidebar);
+    background-color: rgba(4, 4, 5, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-right: 1px solid var(--border-glass);
     display: flex;
     flex-direction: column;
@@ -1596,8 +1784,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .geo-card:hover {
-    background: rgba(197, 168, 128, 0.05);
-    border-color: rgba(197, 168, 128, 0.2);
+    background: rgba(0, 243, 255, 0.06);
+    border-color: rgba(0, 243, 255, 0.2);
 }
 
 .geo-card-header {
@@ -1614,7 +1802,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .geo-card-stat {
-    background: rgba(197, 168, 128, 0.1);
+    background: rgba(0, 243, 255, 0.1);
     color: var(--color-gold);
     font-size: 10px;
     font-weight: 700;
@@ -1653,9 +1841,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .evidence-badge:hover {
-    background: rgba(197, 168, 128, 0.1);
+    background: rgba(0, 243, 255, 0.1);
     color: var(--color-gold);
-    border-color: rgba(197, 168, 128, 0.3);
+    border-color: rgba(0, 243, 255, 0.3);
     transform: translateY(-1px);
 }
 

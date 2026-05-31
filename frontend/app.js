@@ -1,6 +1,7 @@
 // ── Front-End Application Controller V2 ──
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://macdonalts.agenciacyborg.com";
+
 
 // SPA & Timeline State Management
 let timelineData = [];
@@ -37,7 +38,102 @@ document.addEventListener("DOMContentLoaded", () => {
     initTimelineModeButtons();
     initClearFiltersButton();
     initPresenceMap();
+    initMatrixRain();
+    initThemeSwitcher();
 });
+
+// ── Matrix Rain Visual Engine ──
+let matrixInterval = null;
+function initMatrixRain() {
+    const canvas = document.getElementById("matrix-canvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@%&*()_+{}[]|:;<>,.?/~";
+    const fontSize = 14;
+    let columns = Math.floor(width / fontSize);
+    
+    const drops = [];
+    for (let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * -100; // Start offscreen staggered
+    }
+    
+    function draw() {
+        const isLight = document.body.classList.contains("light-theme");
+        
+        // Trail opacity
+        ctx.fillStyle = isLight ? "rgba(245, 245, 247, 0.08)" : "rgba(7, 7, 9, 0.08)";
+        ctx.fillRect(0, 0, width, height);
+        
+        ctx.font = `bold ${fontSize}px monospace`;
+        
+        for (let i = 0; i < drops.length; i++) {
+            const char = chars[Math.floor(Math.random() * chars.length)];
+            
+            // Highlight the leading character or tips of the rain
+            if (drops[i] * fontSize > height - 100) {
+                ctx.fillStyle = isLight ? "#aa00ff" : "#00f3ff";
+            } else {
+                ctx.fillStyle = isLight ? "#00f3ff" : "#aa00ff";
+            }
+            
+            ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+            
+            if (drops[i] * fontSize > height && Math.random() > 0.98) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+    
+    // Window Resize Handler
+    window.addEventListener("resize", () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        const newCols = Math.floor(width / fontSize);
+        if (newCols > drops.length) {
+            for (let i = drops.length; i < newCols; i++) {
+                drops[i] = Math.random() * -100;
+            }
+        }
+    });
+    
+    if (matrixInterval) clearInterval(matrixInterval);
+    matrixInterval = setInterval(draw, 33);
+}
+
+// ── Theme Switcher Control ──
+function initThemeSwitcher() {
+    const btn = document.getElementById("theme-toggle-btn");
+    if (!btn) return;
+    
+    const moonIcon = btn.querySelector(".moon-icon");
+    const sunIcon = btn.querySelector(".sun-icon");
+    
+    // Read from localStorage to persist theme selection
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+        document.body.classList.add("light-theme");
+        if (moonIcon) moonIcon.style.display = "none";
+        if (sunIcon) sunIcon.style.display = "block";
+    }
+    
+    btn.addEventListener("click", () => {
+        const isLight = document.body.classList.toggle("light-theme");
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+        
+        if (isLight) {
+            if (moonIcon) moonIcon.style.display = "none";
+            if (sunIcon) sunIcon.style.display = "block";
+        } else {
+            if (moonIcon) moonIcon.style.display = "block";
+            if (sunIcon) sunIcon.style.display = "none";
+        }
+    });
+}
 
 // ── SPA Navigation ──
 function initNavigation() {
@@ -45,7 +141,7 @@ function initNavigation() {
         item.addEventListener("click", () => {
             const sectionId = item.getAttribute("data-section");
             switchSection(sectionId);
-            
+
             navItems.forEach(nav => nav.classList.remove("active"));
             item.classList.add("active");
         });
@@ -55,12 +151,12 @@ function initNavigation() {
 function switchSection(sectionId) {
     currentSection = sectionId;
     sections.forEach(sec => sec.classList.remove("active-section"));
-    
+
     const targetSection = document.getElementById(`section-${sectionId}`);
     if (targetSection) {
         targetSection.classList.add("active-section");
     }
-    
+
     const titleMap = {
         "overview": "Painel de Investigação Biográfica",
         "timeline": "Eixo Cronológico Profissional (2013 - 2026)",
@@ -74,7 +170,7 @@ function switchSection(sectionId) {
         "sources": "Fontes de Dados Públicas Indexadas"
     };
     pageTitle.textContent = titleMap[sectionId] || "Memorial Digital";
-    
+
     if (sectionId === "courses") loadCoursesGrid();
     if (sectionId === "events") loadEventsGrid();
     if (sectionId === "videos") loadVideosGrid();
@@ -93,7 +189,7 @@ async function loadProfile() {
         if (response.ok) {
             const data = await response.json();
             document.getElementById("bio-summary-text").textContent = data.bio;
-            
+
             // Render rich quick tags including CPF and Instagram if metadata_json is present
             if (data.metadata_json) {
                 const meta = JSON.parse(data.metadata_json);
@@ -120,19 +216,19 @@ async function loadRelevanceMetrics() {
         const response = await fetch(`${API_BASE_URL}/api/relevance`);
         if (response.ok) {
             relevanceData = await response.json();
-            
+
             animateValue("count-courses", 0, relevanceData.total_courses, 1200);
             animateValue("count-events", 0, relevanceData.total_events, 1200);
             animateValue("count-news", 0, relevanceData.total_news, 1200);
             animateValue("count-videos", 0, relevanceData.total_videos, 1200);
-            
+
             const score = relevanceData.total_appearances;
             document.getElementById("relevance-score-index").textContent = score;
-            
+
             const percentage = Math.min((score / 150) * 100, 100);
             const outerCircle = document.querySelector(".gauge-circle-outer");
             outerCircle.style.background = `conic-gradient(var(--color-gold) 0% ${percentage}%, rgba(255, 255, 255, 0.05) ${percentage}% 100%)`;
-            
+
             const badge = document.getElementById("relevance-badge");
             if (score > 100) {
                 badge.textContent = "Autoridade Nacional Destaque";
@@ -161,12 +257,12 @@ async function loadDashboardTestimonials() {
             const data = await response.json();
             const container = document.getElementById("dashboard-testimonial-container");
             container.innerHTML = "";
-            
+
             if (data.length === 0) {
                 container.innerHTML = `<p class="testimonial-text">Nenhum depoimento catalogado.</p>`;
                 return;
             }
-            
+
             data.forEach((item, index) => {
                 const slide = document.createElement("div");
                 slide.className = `testimonial-slide ${index === 0 ? 'active' : ''}`;
@@ -176,7 +272,7 @@ async function loadDashboardTestimonials() {
                 `;
                 container.appendChild(slide);
             });
-            
+
             initTestimonialRotation();
         }
     } catch (e) {
@@ -200,14 +296,14 @@ async function loadTimelineData() {
 
 function renderFacetsSidebar(filteredItems) {
     const rawItems = timelineData;
-    
+
     // 1. Calculate facet counts
     const years = {};
     const categories = {};
     const locations = {};
     const participations = {};
     const institutions = {};
-    
+
     rawItems.forEach(item => {
         // Year
         years[item.year] = (years[item.year] || 0) + 1;
@@ -236,7 +332,7 @@ function renderFacetsSidebar(filteredItems) {
         selectedYear = selectedYear === val ? null : val;
         renderTimelineView();
     });
-    
+
     // 3. Render Category Facet
     renderFacetSection("facet-categories", categories, selectedCategory, (val) => {
         selectedCategory = selectedCategory === val ? null : val;
@@ -266,9 +362,9 @@ function renderFacetSection(elementId, facetsObj, activeVal, onClickCallback) {
     const container = document.getElementById(elementId);
     if (!container) return;
     container.innerHTML = "";
-    
+
     const sortedKeys = Object.keys(facetsObj).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
-    
+
     sortedKeys.forEach(key => {
         const count = facetsObj[key];
         const chip = document.createElement("button");
@@ -285,7 +381,7 @@ function renderFacetSection(elementId, facetsObj, activeVal, onClickCallback) {
 function initTimelineModeButtons() {
     const btnStandard = document.getElementById("btn-mode-standard");
     const btnHierarchical = document.getElementById("btn-mode-hierarchical");
-    
+
     if (btnStandard && btnHierarchical) {
         btnStandard.addEventListener("click", () => {
             btnStandard.classList.add("active");
@@ -293,7 +389,7 @@ function initTimelineModeButtons() {
             displayMode = "standard";
             renderTimelineView();
         });
-        
+
         btnHierarchical.addEventListener("click", () => {
             btnHierarchical.classList.add("active");
             btnStandard.classList.remove("active");
@@ -338,11 +434,11 @@ function getFilteredTimelineData() {
 function renderTimelineView() {
     const filtered = getFilteredTimelineData();
     renderFacetsSidebar(filtered);
-    
+
     const container = document.getElementById("timeline-list-container");
     if (!container) return;
     container.innerHTML = "";
-    
+
     const activeTimelineSection = document.getElementById("timeline-scroll-axis");
     if (activeTimelineSection) {
         // Toggle the visual line class based on mode
@@ -352,23 +448,23 @@ function renderTimelineView() {
             activeTimelineSection.classList.add("timeline-container");
         }
     }
-    
+
     if (filtered.length === 0) {
         container.innerHTML = `<p class="text-muted" style="margin-left: 20px;">Nenhum registro encontrado para a combinação de filtros selecionada.</p>`;
         return;
     }
-    
+
     if (displayMode === "standard") {
         // Render chronological timeline card list
         filtered.forEach((item, index) => {
             const card = document.createElement("div");
             card.className = "timeline-item-card glass-panel hover-grow animate-fade-in";
             card.style.animationDelay = `${index * 0.03}s`;
-            
+
             const dot = document.createElement("div");
             dot.className = "timeline-dot";
             card.appendChild(dot);
-            
+
             // Build card inner elements and evidences
             let evidencesHtml = "";
             if (item.evidences && item.evidences.length > 0) {
@@ -386,7 +482,7 @@ function renderTimelineView() {
                 });
                 evidencesHtml += `</div>`;
             }
-            
+
             card.innerHTML += `
                 <div class="timeline-meta">
                     <span class="timeline-year-badge">${item.year}</span>
@@ -400,7 +496,7 @@ function renderTimelineView() {
                 </div>
                 ${evidencesHtml}
             `;
-            
+
             container.appendChild(card);
         });
     } else {
@@ -417,39 +513,39 @@ function renderTimelineView() {
             }
             yearGroups[item.year][mKey].push(item);
         });
-        
+
         // Sort years descending
         const sortedYears = Object.keys(yearGroups).sort((a, b) => b - a);
-        
+
         sortedYears.forEach(year => {
             const yearGroupDiv = document.createElement("div");
             yearGroupDiv.className = "timeline-year-group";
-            
+
             yearGroupDiv.innerHTML = `
                 <div class="timeline-year-header">
                     <div class="timeline-year-title">${year}</div>
                     <div class="timeline-year-line"></div>
                 </div>
             `;
-            
+
             const months = yearGroups[year];
             // Sort months descending
             const sortedMonths = Object.keys(months).sort((a, b) => b - a);
-            
+
             sortedMonths.forEach(month => {
                 const monthGroupDiv = document.createElement("div");
                 monthGroupDiv.className = "timeline-month-group";
-                
+
                 monthGroupDiv.innerHTML = `
                     <div class="timeline-month-header">${getMonthName(month)}</div>
                 `;
-                
+
                 months[month].forEach(item => {
                     const card = document.createElement("div");
                     card.className = "timeline-item-card glass-panel hover-grow";
                     card.style.margin = "0 0 16px 0";
                     card.style.padding = "16px";
-                    
+
                     let evidencesHtml = "";
                     if (item.evidences && item.evidences.length > 0) {
                         evidencesHtml = `<div class="evidences-list">`;
@@ -463,7 +559,7 @@ function renderTimelineView() {
                         });
                         evidencesHtml += `</div>`;
                     }
-                    
+
                     card.innerHTML = `
                         <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:11px; color:var(--text-muted);">
                             <span>${item.category || translateType(item.type)}</span>
@@ -484,7 +580,7 @@ function renderTimelineView() {
             container.appendChild(yearGroupDiv);
         });
     }
-    
+
     bindVideoTriggers();
 }
 
@@ -495,7 +591,7 @@ async function loadLattesCurriculum() {
         const response = await fetch(`${API_BASE_URL}/api/lattes`);
         if (response.ok) {
             const data = await response.json();
-            
+
             // Populate Lattes sections
             populateLattesSection("lattes-content-formacao", data.formacao, "Nenhuma formação registrada.");
             populateLattesSection("lattes-content-atuacao", data.atuacao, "Nenhuma atuação profissional registrada.");
@@ -514,16 +610,16 @@ function populateLattesSection(elementId, itemsList, emptyMessage) {
     const container = document.getElementById(elementId);
     if (!container) return;
     container.innerHTML = "";
-    
+
     if (!itemsList || itemsList.length === 0) {
         container.innerHTML = `<p class="text-muted" style="font-size:12px; font-style:italic;">${emptyMessage}</p>`;
         return;
     }
-    
+
     itemsList.forEach(item => {
         const div = document.createElement("div");
         div.className = "lattes-item";
-        
+
         let details = "";
         if (item.institution) {
             details += ` no(a) <strong>${item.institution}</strong>`;
@@ -537,7 +633,7 @@ function populateLattesSection(elementId, itemsList, emptyMessage) {
         if (item.participation_type) {
             details += ` [Participação: <strong>${item.participation_type}</strong>]`;
         }
-        
+
         div.innerHTML = `
             <span class="lattes-item-year">${item.year} - ${item.month ? `${item.month.toString().padStart(2, '0')}/` : ''}${item.year}</span>
             <span><strong>${item.title}</strong>. ${item.description || ''}${details}.</span>
@@ -566,7 +662,7 @@ function renderPresenceMapDashboard() {
     const listContainer = document.getElementById("map-geo-cards-list");
     if (!listContainer) return;
     listContainer.innerHTML = "";
-    
+
     // Group timeline data by city to produce dynamic geographic details cards
     const citiesCount = {};
     timelineData.forEach(item => {
@@ -608,7 +704,7 @@ function renderPresenceMapDashboard() {
     }
 
     const sortedCities = Object.values(citiesCount).sort((a, b) => b.itemsCount - a.itemsCount);
-    
+
     // Filter displayed list cards based on mapScope
     const filteredCities = sortedCities.filter(c => {
         if (mapScope === "brasil" && c.country !== "Brasil") return false;
@@ -634,12 +730,12 @@ function renderPresenceMapDashboard() {
                 ${c.details.length > 3 ? `<br>• e mais ${c.details.length - 3} registros...` : ''}
             </div>
         `;
-        
+
         // Setup marker highlights on card hover
         card.addEventListener("mouseenter", () => {
             highlightMarker(c.city.toLowerCase());
         });
-        
+
         listContainer.appendChild(card);
     });
 }
@@ -649,7 +745,7 @@ function highlightMarker(cityName) {
     document.querySelectorAll(".map-marker-node").forEach(node => {
         node.querySelector(".marker-core").setAttribute("r", "5");
     });
-    
+
     const node = document.getElementById(`marker-${cityName.replace("ã", "a").replace(" ", "")}`);
     if (node) {
         node.querySelector(".marker-core").setAttribute("r", "8");
@@ -659,30 +755,30 @@ function highlightMarker(cityName) {
 // Bind SVG markers hovers & tooltips
 function initInteractiveMapTriggers() {
     const tooltip = document.getElementById("map-presence-tooltip");
-    
+
     const markers = {
         "goiania": { title: "Goiânia - GO, Brasil", desc: "Sede principal clínica, 11 registros cronológicos indexados (Cursos, Eventos, Prêmios)." },
         "saopaulo": { title: "São Paulo - SP, Brasil", desc: "Pólo secundário de mentorias e especializações de luxo da Dra. Nássara Mesquita (2 registros)." },
         "miami": { title: "Miami - Flórida, EUA", desc: "Certificação internacional de anatomia em cadáver fresco no Miami Anatomical Research Center." }
     };
-    
+
     Object.keys(markers).forEach(key => {
         const node = document.getElementById(`marker-${key}`);
         if (node) {
             node.addEventListener("mouseenter", (e) => {
                 tooltip.querySelector(".tooltip-city").textContent = markers[key].title;
                 tooltip.querySelector(".tooltip-desc").textContent = markers[key].desc;
-                
+
                 tooltip.classList.add("active");
-                
+
                 // Position tooltip relative to marker coordinates inside SVGs
                 const rect = node.getBoundingClientRect();
                 const parentRect = node.ownerSVGElement.getBoundingClientRect();
-                
+
                 tooltip.style.left = `${rect.left - parentRect.left + 20}px`;
                 tooltip.style.top = `${rect.top - parentRect.top - 20}px`;
             });
-            
+
             node.addEventListener("mouseleave", () => {
                 tooltip.classList.remove("active");
             });
@@ -701,7 +797,7 @@ function initPresenceMap() {
             renderPresenceMapDashboard();
         });
     });
-    
+
     initInteractiveMapTriggers();
 }
 
@@ -714,7 +810,7 @@ async function loadCoursesGrid() {
             const data = await response.json();
             const container = document.getElementById("courses-grid-container");
             container.innerHTML = "";
-            
+
             data.forEach((item, index) => {
                 const card = document.createElement("div");
                 card.className = "item-card glass-panel hover-grow animate-fade-in";
@@ -744,7 +840,7 @@ async function loadEventsGrid() {
             const data = await response.json();
             const container = document.getElementById("events-grid-container");
             container.innerHTML = "";
-            
+
             data.forEach((item, index) => {
                 const card = document.createElement("div");
                 card.className = "item-card glass-panel hover-grow animate-fade-in";
@@ -774,7 +870,7 @@ async function loadVideosGrid() {
             const data = await response.json();
             const container = document.getElementById("videos-grid-container");
             container.innerHTML = "";
-            
+
             data.forEach((item, index) => {
                 const card = document.createElement("div");
                 card.className = "video-card glass-panel hover-grow animate-fade-in";
@@ -792,7 +888,7 @@ async function loadVideosGrid() {
                 `;
                 container.appendChild(card);
             });
-            
+
             bindVideoTriggers();
         }
     } catch (e) {
@@ -808,7 +904,7 @@ async function loadNewsGrid() {
             const data = await response.json();
             const container = document.getElementById("news-grid-container");
             container.innerHTML = "";
-            
+
             data.forEach((item, index) => {
                 const card = document.createElement("div");
                 card.className = "item-card glass-panel hover-grow animate-fade-in";
@@ -838,7 +934,7 @@ async function loadTestimonialsSection() {
             const data = await studentsResp.json();
             const container = document.getElementById("students-list-view");
             container.innerHTML = "";
-            
+
             data.forEach(item => {
                 const itemDiv = document.createElement("div");
                 itemDiv.className = "student-item";
@@ -852,13 +948,13 @@ async function loadTestimonialsSection() {
                 container.appendChild(itemDiv);
             });
         }
-        
+
         const testimonialsResp = await fetch(`${API_BASE_URL}/api/testimonials`);
         if (testimonialsResp.ok) {
             const data = await testimonialsResp.json();
             const container = document.getElementById("testimonials-list-view");
             container.innerHTML = "";
-            
+
             data.forEach(item => {
                 const itemDiv = document.createElement("div");
                 itemDiv.className = "testimonial-card-item";
@@ -882,7 +978,7 @@ async function loadSourcesTable() {
             const data = await response.json();
             const body = document.getElementById("sources-table-body");
             body.innerHTML = "";
-            
+
             data.forEach(item => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
@@ -910,7 +1006,7 @@ async function openTranscriptionModal(videoId) {
                 document.getElementById("transcription-modal-title").textContent = video.title;
                 document.getElementById("transcription-modal-summary").textContent = video.summary;
                 document.getElementById("transcription-modal-text").textContent = video.transcription;
-                
+
                 modal.classList.add("active");
             }
         }
@@ -923,7 +1019,7 @@ function initModalClose() {
     btnCloseModal.addEventListener("click", () => {
         modal.classList.remove("active");
     });
-    
+
     modal.addEventListener("click", (e) => {
         if (e.target === modal) {
             modal.classList.remove("active");
@@ -948,16 +1044,16 @@ function initSyncButton() {
         btnSyncPipeline.disabled = true;
         btnSyncPipeline.querySelector("i").classList.add("fa-spin");
         btnSyncPipeline.querySelector("span:last-child").textContent = "Sincronizando V2...";
-        
+
         setTimeout(async () => {
             btnSyncPipeline.disabled = false;
             btnSyncPipeline.querySelector("i").classList.remove("fa-spin");
             btnSyncPipeline.querySelector("span:last-child").textContent = "Buscar Atualizações";
-            
+
             await loadProfile();
             await loadRelevanceMetrics();
             await loadTimelineData();
-            
+
             showToast("Banco de Dados Biográfico Sincronizado com Sucesso V2!");
         }, 1500);
     });
@@ -967,9 +1063,9 @@ function showToast(message) {
     const toast = document.getElementById("toast-notif");
     const toastText = document.getElementById("toast-message-text");
     toastText.textContent = message;
-    
+
     toast.classList.add("active");
-    
+
     setTimeout(() => {
         toast.classList.remove("active");
     }, 4000);
@@ -979,7 +1075,7 @@ function showToast(message) {
 function initSearch() {
     searchInput.addEventListener("input", () => {
         const query = searchInput.value.toLowerCase().trim();
-        
+
         if (currentSection === "timeline") {
             const cards = document.querySelectorAll(".timeline-item-card");
             cards.forEach(card => {
@@ -1002,17 +1098,17 @@ function initSearch() {
 function animateValue(id, start, end, duration) {
     const obj = document.getElementById(id);
     if (!obj) return;
-    
+
     if (start === end) {
         obj.textContent = end;
         return;
     }
-    
+
     const range = end - start;
     let current = start;
     const increment = end > start ? 1 : -1;
     const stepTime = Math.abs(Math.floor(duration / range));
-    
+
     const timer = setInterval(() => {
         current += increment;
         obj.textContent = current;
@@ -1025,9 +1121,9 @@ function animateValue(id, start, end, duration) {
 function initTestimonialRotation() {
     const slides = document.querySelectorAll(".testimonial-slide");
     let currentSlide = 0;
-    
+
     if (slides.length <= 1) return;
-    
+
     setInterval(() => {
         slides[currentSlide].classList.remove("active");
         currentSlide = (currentSlide + 1) % slides.length;
