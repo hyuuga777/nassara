@@ -2440,7 +2440,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* --- Inline Edit Icon styles for Lattes & Parameters --- */
 .lattes-edit-btn, .sconfig-edit-btn {
-    opacity: 0;
+    opacity: 0.85;
     transition: var(--transition-smooth);
     background: rgba(0, 243, 255, 0.1);
     color: var(--cyan);
