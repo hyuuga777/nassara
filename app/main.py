@@ -30,6 +30,56 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+def startup_event():
+    from app.database import SessionLocal, SearchParameters
+    db = SessionLocal()
+    try:
+        count = db.query(SearchParameters).count()
+        if count == 0:
+            print("[Startup] Seeding default search parameters...")
+            keywords = [
+                {"value": "Nássara Mesquita", "label": "Nome principal", "notes": "Variação mais comum nas buscas"},
+                {"value": "Nássara Borges Mesquita Oliveira", "label": "Nome completo", "notes": "Conforme registrado no Currículo Lattes"},
+                {"value": "OLIVEIRA, N. B. M.", "label": "Citação bibliográfica", "notes": "Formato de citação em produções científicas"},
+                {"value": "Dra. Nássara Mesquita", "label": "Nome profissional", "notes": "Formato usado em mídias e palestras"},
+                {"value": "Nassara Mesquita Microtox", "label": "Técnica Microtox", "notes": "Associação de marca/técnica profissional"},
+                {"value": "Nassara Mesquita harmonização facial", "label": "Especialidade principal", "notes": "Foco de atuação clínica"},
+                {"value": "Mipps + HRF Facial Trainning", "label": "Curso internacional", "notes": "Curso de anatomia aplicada facial nos EUA"},
+                {"value": "Summer Peel", "label": "Método estético", "notes": "Método de peeling químico e revitalização"},
+                {"value": "Striort", "label": "Tratamento ortomolecular", "notes": "Técnica ortomolecular de combate a estrias"},
+                {"value": "Flaci 10", "label": "Protocolo de flacidez", "notes": "Técnica Flaci 10 de tratamento corporal"},
+                {"value": "Lipoescultura Gessada", "label": "Técnica corporal", "notes": "Tratamento ortomolecular para gordura localizada"}
+            ]
+            sites = [
+                {"value": "lattes.cnpq.br/7120531705115048", "label": "Currículo Lattes", "notes": "Perfil oficial do CNPq"},
+                {"value": "instagram.com/nassaramesquita", "label": "Instagram Oficial", "notes": "Principal canal de engajamento"},
+                {"value": "escavador.com", "label": "Escavador", "notes": "Indexador acadêmico público"},
+                {"value": "crfgo.org.br", "label": "CRF-GO", "notes": "Conselho Regional de Farmácia de Goiás"},
+                {"value": "revistas.unilus.edu.br", "label": "Revista UNILUS", "notes": "Periódico do artigo de Fototerapia publicado em 2019"},
+                {"value": "iepg.edu.br", "label": "IEPG", "notes": "Instituto de pós-graduação onde é coordenadora"},
+                {"value": "cff.org.br", "label": "CFF", "notes": "Conselho Federal de Farmácia - GT Estética"},
+                {"value": "faculdadecathedral.edu.br", "label": "Faculdades Cathedral", "notes": "Instituição onde orientou 17 monografias"}
+            ]
+            engines = [
+                {"value": "Google Search", "label": "Google", "notes": "Principal motor de busca global"},
+                {"value": "Google Scholar", "label": "Google Acadêmico", "notes": "Pesquisa de publicações e citações científicas"},
+                {"value": "YouTube Search", "label": "YouTube", "notes": "Pesquisa de vídeos e podcasts"},
+                {"value": "Bing", "label": "Bing", "notes": "Motor de busca secundário"}
+            ]
+            for kw in keywords:
+                db.add(SearchParameters(type="keyword", value=kw["value"], label=kw["label"], notes=kw["notes"], active=1))
+            for st in sites:
+                db.add(SearchParameters(type="site", value=st["value"], label=st["label"], notes=st["notes"], active=1))
+            for eg in engines:
+                db.add(SearchParameters(type="engine", value=eg["value"], label=eg["label"], notes=eg["notes"], active=1 if eg["value"] != "Bing" else 0))
+            db.commit()
+            print("[Startup] Default search parameters seeded.")
+    except Exception as e:
+        print(f"[Startup] Error seeding default search parameters: {e}")
+    finally:
+        db.close()
+
 # ── API Endpoints ─────────────────────────────────────────────────────────
 
 @app.get("/api/profile")

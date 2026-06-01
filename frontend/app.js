@@ -1380,27 +1380,32 @@ function getDefaultSearchParams() {
     return {
         keywords: [
             { id: -1, type: 'keyword', value: 'Nássara Mesquita', label: 'Nome principal', active: true, notes: 'Variação mais comum nas buscas' },
-            { id: -2, type: 'keyword', value: 'Nássara Borges Mesquita Oliveira', label: 'Nome completo (Lattes)', active: true, notes: 'Conforme registrado no Currículo Lattes' },
-            { id: -3, type: 'keyword', value: 'Nassara Mesquita farmacêutica', label: 'Nome + profissão', active: true, notes: '' },
-            { id: -4, type: 'keyword', value: 'Nassara Mesquita harmonização facial', label: 'Nome + especialidade', active: true, notes: '' },
-            { id: -5, type: 'keyword', value: 'Nassara Mesquita Goiânia', label: 'Nome + cidade', active: true, notes: '' },
-            { id: -6, type: 'keyword', value: 'Nassara Mesquita Microtox', label: 'Nome + técnica Microtox', active: true, notes: '' },
-            { id: -7, type: 'keyword', value: 'OLIVEIRA, N. B. M.', label: 'Citação bibliográfica Lattes', active: true, notes: 'Formato usado em produções científicas' },
+            { id: -2, type: 'keyword', value: 'Nássara Borges Mesquita Oliveira', label: 'Nome completo', active: true, notes: 'Conforme registrado no Currículo Lattes' },
+            { id: -3, type: 'keyword', value: 'OLIVEIRA, N. B. M.', label: 'Citação bibliográfica', active: true, notes: 'Formato de citação em produções científicas' },
+            { id: -4, type: 'keyword', value: 'Dra. Nássara Mesquita', label: 'Nome profissional', active: true, notes: 'Formato usado em mídias e palestras' },
+            { id: -5, type: 'keyword', value: 'Nassara Mesquita Microtox', label: 'Técnica Microtox', active: true, notes: 'Associação de marca/técnica profissional' },
+            { id: -6, type: 'keyword', value: 'Nassara Mesquita harmonização facial', label: 'Especialidade principal', active: true, notes: 'Foco de atuação clínica' },
+            { id: -7, type: 'keyword', value: 'Mipps + HRF Facial Trainning', label: 'Curso internacional', active: true, notes: 'Curso de anatomia aplicada facial nos EUA' },
+            { id: -8, type: 'keyword', value: 'Summer Peel', label: 'Método estético', active: true, notes: 'Método de peeling químico e revitalização' },
+            { id: -9, type: 'keyword', value: 'Striort', label: 'Tratamento ortomolecular', active: true, notes: 'Técnica ortomolecular de combate a estrias' },
+            { id: -90, type: 'keyword', value: 'Flaci 10', label: 'Protocolo de flacidez', active: true, notes: 'Técnica Flaci 10 de tratamento corporal' },
+            { id: -91, type: 'keyword', value: 'Lipoescultura Gessada', label: 'Técnica corporal', active: true, notes: 'Tratamento ortomolecular para gordura localizada' }
         ],
         sites: [
-            { id: -10, type: 'site', value: 'lattes.cnpq.br', label: 'Lattes CNPq', active: true, notes: 'ID: 7120531705115048' },
-            { id: -11, type: 'site', value: 'instagram.com/nassaramesquita', label: 'Instagram Oficial', active: true, notes: 'Principal canal de conteúdo' },
+            { id: -10, type: 'site', value: 'lattes.cnpq.br/7120531705115048', label: 'Currículo Lattes', active: true, notes: 'Perfil oficial do CNPq' },
+            { id: -11, type: 'site', value: 'instagram.com/nassaramesquita', label: 'Instagram Oficial', active: true, notes: 'Principal canal de engajamento' },
             { id: -12, type: 'site', value: 'escavador.com', label: 'Escavador', active: true, notes: 'Indexador acadêmico público' },
-            { id: -13, type: 'site', value: 'linkedin.com', label: 'LinkedIn', active: true, notes: 'Perfil profissional' },
-            { id: -14, type: 'site', value: 'sympla.com.br', label: 'Sympla', active: true, notes: 'Plataforma de eventos e cursos' },
-            { id: -15, type: 'site', value: 'youtube.com', label: 'YouTube', active: true, notes: 'Vídeos e palestras' },
-            { id: -16, type: 'site', value: 'crfgo.org.br', label: 'CRF-GO', active: true, notes: 'Conselho Regional de Farmácia - GO' },
+            { id: -13, type: 'site', value: 'crfgo.org.br', label: 'CRF-GO', active: true, notes: 'Conselho Regional de Farmácia de Goiás' },
+            { id: -14, type: 'site', value: 'revistas.unilus.edu.br', label: 'Revista UNILUS', active: true, notes: 'Periódico do artigo de Fototerapia publicado em 2019' },
+            { id: -15, type: 'site', value: 'iepg.edu.br', label: 'IEPG', active: true, notes: 'Instituto de pós-graduação onde é coordenadora' },
+            { id: -16, type: 'site', value: 'cff.org.br', label: 'CFF', active: true, notes: 'Conselho Federal de Farmácia - GT Estética' },
+            { id: -17, type: 'site', value: 'faculdadecathedral.edu.br', label: 'Faculdades Cathedral', active: true, notes: 'Instituição onde orientou 17 monografias' }
         ],
         engines: [
-            { id: -20, type: 'engine', value: 'Google Search', label: 'Google', active: true, notes: 'Principal motor de busca' },
-            { id: -21, type: 'engine', value: 'Google Scholar', label: 'Google Acadêmico', active: true, notes: 'Para produções científicas' },
-            { id: -22, type: 'engine', value: 'Bing', label: 'Bing', active: false, notes: '' },
-            { id: -23, type: 'engine', value: 'YouTube Search', label: 'YouTube', active: true, notes: 'Para vídeos e podcasts' },
+            { id: -20, type: 'engine', value: 'Google Search', label: 'Google', active: true, notes: 'Principal motor de busca global' },
+            { id: -21, type: 'engine', value: 'Google Scholar', label: 'Google Acadêmico', active: true, notes: 'Pesquisa de publicações e citações científicas' },
+            { id: -22, type: 'engine', value: 'YouTube Search', label: 'YouTube', active: true, notes: 'Pesquisa de vídeos e podcasts' },
+            { id: -23, type: 'engine', value: 'Bing', label: 'Bing', active: false, notes: 'Motor de busca secundário' }
         ]
     };
 }

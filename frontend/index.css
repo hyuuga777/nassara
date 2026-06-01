@@ -2234,3 +2234,108 @@ h1, h2, h3, h4, h5, h6 {
 .sconfig-btn.delete-btn:hover { background: rgba(255,0,85,0.1); border-color: rgba(255,0,85,0.3); color: var(--color-red); }
 .sconfig-empty { text-align: center; color: var(--text-muted); font-size: 13px; padding: 40px 20px; }
 .sconfig-empty i { font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.4; }
+
+/* ── Synchronization Pipeline & Run Search Styling ── */
+.btn-sync-pipeline {
+    background: rgba(0, 243, 255, 0.08);
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    color: var(--cyan);
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font-title);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition-smooth);
+    text-shadow: 0 0 5px rgba(0, 243, 255, 0.25);
+    box-shadow: 0 2px 10px rgba(0, 243, 255, 0.05);
+    outline: none;
+}
+
+.btn-sync-pipeline:hover {
+    background: rgba(0, 243, 255, 0.15);
+    border-color: var(--cyan);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.btn-sync-pipeline:active {
+    transform: translateY(1px);
+}
+
+.sconfig-run-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(0, 243, 255, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border-radius: var(--border-radius-lg);
+    background: rgba(18, 18, 24, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.sconfig-run-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--text-primary);
+}
+
+.sconfig-run-info i {
+    font-size: 24px;
+    color: var(--cyan);
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+}
+
+.sconfig-run-info div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+}
+
+.sconfig-run-info strong {
+    font-family: var(--font-title);
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+}
+
+.sconfig-run-info span {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.btn-run-search {
+    background: var(--accent-gradient);
+    border: none;
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--font-title);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition-smooth);
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(170, 0, 255, 0.2);
+    outline: none;
+}
+
+.btn-run-search:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 243, 255, 0.4);
+}
+
+.btn-run-search:active {
+    transform: translateY(1px);
+}
