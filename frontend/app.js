@@ -619,16 +619,46 @@ async function loadLattesCurriculum() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/lattes`);
         if (response.ok) {
-            const data = await response.json();
+            let data = await response.json();
+
+            // Handle presence map location filtering client-side
+            const filterInfo = document.getElementById("lattes-filter-info");
+            const filterCity = document.getElementById("lattes-filter-city");
+            const btnClear = document.getElementById("btn-clear-lattes-filter");
+
+            if (selectedLocation) {
+                if (filterInfo) filterInfo.style.display = "flex";
+                if (filterCity) filterCity.textContent = selectedLocation;
+
+                // Filter lists inside data by selectedLocation
+                const filterFunc = item => !selectedLocation || item.location === selectedLocation;
+                data.formacao = data.formacao.filter(filterFunc);
+                data.atuacao = data.atuacao.filter(filterFunc);
+                data.producoes = data.producoes.filter(filterFunc);
+                data.eventos = data.eventos.filter(filterFunc);
+                data.cursos = data.cursos.filter(filterFunc);
+                data.orientacoes = data.orientacoes.filter(filterFunc);
+                data.certificacoes = data.certificacoes.filter(filterFunc);
+            } else {
+                if (filterInfo) filterInfo.style.display = "none";
+            }
+
+            if (btnClear && !btnClear.dataset.bound) {
+                btnClear.dataset.bound = "true";
+                btnClear.addEventListener("click", () => {
+                    selectedLocation = null;
+                    loadLattesCurriculum();
+                });
+            }
 
             // Populate Lattes sections
-            populateLattesSection("lattes-content-formacao", data.formacao, "Nenhuma formação registrada.");
-            populateLattesSection("lattes-content-atuacao", data.atuacao, "Nenhuma atuação profissional registrada.");
-            populateLattesSection("lattes-content-producoes", data.producoes, "Nenhuma produção registrada.");
-            populateLattesSection("lattes-content-eventos", data.eventos, "Nenhum evento registrado.");
-            populateLattesSection("lattes-content-cursos", data.cursos, "Nenhum curso registrado.");
-            populateLattesSection("lattes-content-orientacoes", data.orientacoes, "Nenhuma orientação registrada.");
-            populateLattesSection("lattes-content-certificacoes", data.certificacoes, "Nenhuma certificação registrada.");
+            populateLattesSection("lattes-content-formacao", data.formacao, "Nenhuma formação registrada para esta localidade.");
+            populateLattesSection("lattes-content-atuacao", data.atuacao, "Nenhuma atuação profissional registrada para esta localidade.");
+            populateLattesSection("lattes-content-producoes", data.producoes, "Nenhuma produção registrada para esta localidade.");
+            populateLattesSection("lattes-content-eventos", data.eventos, "Nenhum evento registrado para esta localidade.");
+            populateLattesSection("lattes-content-cursos", data.cursos, "Nenhum curso registrado para esta localidade.");
+            populateLattesSection("lattes-content-orientacoes", data.orientacoes, "Nenhuma orientação registrada para esta localidade.");
+            populateLattesSection("lattes-content-certificacoes", data.certificacoes, "Nenhuma certificação registrada para esta localidade.");
         }
     } catch (e) {
         console.error("Falha ao compilar Currículo Lattes:", e);
