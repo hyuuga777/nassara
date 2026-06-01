@@ -2339,3 +2339,130 @@ h1, h2, h3, h4, h5, h6 {
 .btn-run-search:active {
     transform: translateY(1px);
 }
+
+/* ── Premium AI Summary Banners ── */
+.section-summary-banner {
+    padding: 24px;
+    margin-bottom: 24px;
+    border-left: 4px solid var(--purple);
+    background: rgba(18, 18, 24, 0.45);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+    border-radius: var(--border-radius-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-banner-glow {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(170, 0, 255, 0.08) 0%, transparent 75%);
+    top: -125px;
+    right: -75px;
+    pointer-events: none;
+}
+
+.summary-banner-text {
+    margin-top: 10px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-summary-action {
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transition-smooth);
+    border: none;
+    outline: none;
+}
+
+.btn-summary-edit {
+    background: rgba(0, 243, 255, 0.1);
+    color: var(--cyan);
+    border: 1px solid rgba(0, 243, 255, 0.2);
+}
+
+.btn-summary-edit:hover {
+    background: rgba(0, 243, 255, 0.25);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.25);
+    transform: scale(1.05);
+}
+
+.btn-summary-ai {
+    background: rgba(170, 0, 255, 0.15);
+    color: #e285ff;
+    border: 1px solid rgba(170, 0, 255, 0.3);
+}
+
+.btn-summary-ai:hover {
+    background: rgba(170, 0, 255, 0.3);
+    box-shadow: 0 0 12px rgba(170, 0, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* Edit Form Textarea */
+.summary-textarea {
+    background: rgba(7, 7, 9, 0.7);
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: inherit;
+    font-size: 13.5px;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.summary-textarea:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan-glow);
+}
+
+/* Shimmer animation while generating */
+@keyframes summary-shimmer {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+.generating-ai {
+    animation: summary-shimmer 1.5s infinite ease-in-out;
+}
+
+/* --- Inline Edit Icon styles for Lattes & Parameters --- */
+.lattes-edit-btn, .sconfig-edit-btn {
+    opacity: 0;
+    transition: var(--transition-smooth);
+    background: rgba(0, 243, 255, 0.1);
+    color: var(--cyan);
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 600;
+    margin-left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    vertical-align: middle;
+}
+
+.lattes-item:hover .lattes-edit-btn, .sconfig-item:hover .sconfig-edit-btn {
+    opacity: 1;
+}
+
+.lattes-edit-btn:hover, .sconfig-edit-btn:hover {
+    background: rgba(0, 243, 255, 0.25);
+    box-shadow: 0 0 10px var(--cyan-glow);
+}
+

@@ -1,6 +1,8 @@
 // ── Front-End Application Controller V2 ──
 
-const API_BASE_URL = "https://macdonalts.agenciacyborg.com";
+const API_BASE_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? "http://127.0.0.1:8000"
+    : "https://macdonalts.agenciacyborg.com";
 
 
 // SPA & Timeline State Management
@@ -46,6 +48,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     initPrintLattesButton();
     initSearchConfig();
     loadSearchConfig();
+    initEditItemModal();
+    initSectionSummaries();
 });
 
 async function loadSourcesMap() {
@@ -644,6 +648,12 @@ function populateLattesSection(elementId, itemsList, emptyMessage) {
     itemsList.forEach(item => {
         const div = document.createElement("div");
         div.className = "lattes-item";
+        div.style.display = "flex";
+        div.style.justifyContent = "space-between";
+        div.style.alignItems = "flex-start";
+        div.style.gap = "15px";
+        div.style.padding = "10px 0";
+        div.style.borderBottom = "1px solid rgba(255, 255, 255, 0.05)";
 
         let details = "";
         if (item.institution) {
@@ -660,9 +670,19 @@ function populateLattesSection(elementId, itemsList, emptyMessage) {
         }
 
         div.innerHTML = `
-            <span class="lattes-item-year">${item.year} - ${item.month ? `${item.month.toString().padStart(2, '0')}/` : ''}${item.year}</span>
-            <span><strong>${item.title}</strong>. ${item.description || ''}${details}.</span>
+            <div style="flex: 1;">
+                <span class="lattes-item-year">${item.year} - ${item.month ? `${item.month.toString().padStart(2, '0')}/` : ''}${item.year}</span>
+                <span><strong>${item.title}</strong>. ${item.description || ''}${details}.</span>
+            </div>
+            <button class="lattes-edit-btn" data-id="${item.id}" style="flex-shrink: 0;">
+                <i class="fa-solid fa-pen"></i> Editar
+            </button>
         `;
+
+        div.querySelector('.lattes-edit-btn').addEventListener('click', () => {
+            openEditItemModal(item);
+        });
+
         container.appendChild(div);
     });
 }
@@ -1314,12 +1334,13 @@ function getMonthName(monthNum) {
 // SEARCH CONFIG MODULE  (Parâmetros de Busca)
 // ══════════════════════════════════════════════════════════════════════
 
-let searchConfigData = { keywords: [], sites: [], engines: [] };
+let searchConfigData = { keywords: [], sites: [], engines: [], socials: [] };
 
 const TYPE_ICONS = {
     keyword: 'fa-key',
     site: 'fa-globe',
-    engine: 'fa-magnifying-glass'
+    engine: 'fa-magnifying-glass',
+    social: 'fa-share-nodes'
 };
 
 function initSearchConfig() {
@@ -1358,7 +1379,8 @@ async function loadSearchConfig() {
         // If API returns empty arrays, seed with defaults
         const hasData = (data.keywords && data.keywords.length > 0) ||
                         (data.sites && data.sites.length > 0) ||
-                        (data.engines && data.engines.length > 0);
+                        (data.engines && data.engines.length > 0) ||
+                        (data.socials && data.socials.length > 0);
 
         if (hasData) {
             searchConfigData = data;
@@ -1374,6 +1396,7 @@ async function loadSearchConfig() {
     renderSearchConfigPanel('keywords');
     renderSearchConfigPanel('sites');
     renderSearchConfigPanel('engines');
+    renderSearchConfigPanel('socials');
 }
 
 function getDefaultSearchParams() {
@@ -1406,6 +1429,11 @@ function getDefaultSearchParams() {
             { id: -21, type: 'engine', value: 'Google Scholar', label: 'Google Acadêmico', active: true, notes: 'Pesquisa de publicações e citações científicas' },
             { id: -22, type: 'engine', value: 'YouTube Search', label: 'YouTube', active: true, notes: 'Pesquisa de vídeos e podcasts' },
             { id: -23, type: 'engine', value: 'Bing', label: 'Bing', active: false, notes: 'Motor de busca secundário' }
+        ],
+        socials: [
+            { id: -30, type: 'social', value: 'instagram.com/dranassaramesquita', label: 'Instagram Profissional', active: true, notes: 'Perfil oficial da Dra. Nássara Mesquita no Instagram' },
+            { id: -31, type: 'social', value: 'facebook.com/dranassaramesquita', label: 'Facebook Profissional', active: true, notes: 'Perfil no Facebook' },
+            { id: -32, type: 'social', value: 'linkedin.com/in/nassara-mesquita-878880182', label: 'LinkedIn Acadêmico', active: true, notes: 'Perfil acadêmico e profissional no LinkedIn' }
         ]
     };
 }
@@ -1421,13 +1449,19 @@ function renderSearchConfigPanel(type) {
     if (countEl) countEl.textContent = `${activeCount} ativo${activeCount !== 1 ? 's' : ''}`;
 
     if (items.length === 0) {
-        listEl.innerHTML = `<div class="sconfig-empty"><i class="fa-solid fa-${TYPE_ICONS[type.slice(0,-1)] || 'circle-info'}"></i>Nenhum parâmetro cadastrado.</div>`;
+        let emptyIcon = 'circle-info';
+        if (type === 'keywords') emptyIcon = 'key';
+        else if (type === 'sites') emptyIcon = 'globe';
+        else if (type === 'engines') emptyIcon = 'magnifying-glass';
+        else if (type === 'socials') emptyIcon = 'share-nodes';
+
+        listEl.innerHTML = `<div class="sconfig-empty" style="text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px;"><i class="fa-solid fa-${emptyIcon}" style="display: block; font-size: 24px; margin-bottom: 10px; color: var(--cyan);"></i>Nenhum parâmetro cadastrado.</div>`;
         return;
     }
 
     listEl.innerHTML = '';
     items.forEach(item => {
-        const singularType = type === 'keywords' ? 'keyword' : type === 'sites' ? 'site' : 'engine';
+        const singularType = type === 'keywords' ? 'keyword' : type === 'sites' ? 'site' : type === 'engines' ? 'engine' : 'social';
         const icon = TYPE_ICONS[singularType] || 'circle';
         const div = document.createElement('div');
         div.className = `sconfig-item${item.active ? '' : ' inactive'}`;
@@ -1443,6 +1477,9 @@ function renderSearchConfigPanel(type) {
                 <button class="sconfig-btn toggle-btn ${item.active ? 'active-state' : ''}" data-id="${item.id}" data-type="${type}" data-active="${item.active ? 1 : 0}" title="${item.active ? 'Desativar' : 'Ativar'}">
                     <i class="fa-solid fa-${item.active ? 'eye' : 'eye-slash'}"></i>
                     ${item.active ? 'Ativo' : 'Inativo'}
+                </button>
+                <button class="sconfig-btn edit-param-btn" data-id="${item.id}" data-type="${type}" title="Editar">
+                    <i class="fa-solid fa-pen"></i> Editar
                 </button>
                 <button class="sconfig-btn delete-btn" data-id="${item.id}" data-type="${type}" title="Remover">
                     <i class="fa-solid fa-trash"></i>
@@ -1473,6 +1510,75 @@ function renderSearchConfigPanel(type) {
                 } catch (e) { /* offline */ }
             }
             showToast(newActive ? 'Parâmetro ativado!' : 'Parâmetro desativado!');
+        });
+    });
+
+    // Bind edit buttons
+    listEl.querySelectorAll('.edit-param-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = parseInt(btn.getAttribute('data-id'));
+            const panelType = btn.getAttribute('data-type');
+            const item = searchConfigData[panelType].find(i => i.id === id);
+            if (!item) return;
+
+            const itemDiv = listEl.querySelector(`.sconfig-item[data-id="${id}"]`);
+            if (!itemDiv) return;
+
+            const bodyEl = itemDiv.querySelector('.sconfig-item-body');
+            const actionsEl = itemDiv.querySelector('.sconfig-item-actions');
+
+            // Replace body with edit inputs
+            bodyEl.innerHTML = `
+                <input type="text" class="edit-value-input" value="${item.value}" style="background:rgba(7,7,9,0.7); border:1px solid var(--cyan); color:#fff; border-radius:4px; padding:6px; font-size:12.5px; margin-bottom:6px; width:100%; outline:none;">
+                <input type="text" class="edit-label-input" placeholder="Rótulo" value="${item.label || ''}" style="background:rgba(7,7,9,0.7); border:1px solid var(--cyan); color:#fff; border-radius:4px; padding:6px; font-size:11px; margin-bottom:6px; width:100%; outline:none;">
+                <input type="text" class="edit-notes-input" placeholder="Observações" value="${item.notes || ''}" style="background:rgba(7,7,9,0.7); border:1px solid var(--cyan); color:#fff; border-radius:4px; padding:6px; font-size:11px; width:100%; outline:none;">
+            `;
+
+            // Replace actions with Save/Cancel
+            actionsEl.innerHTML = `
+                <button class="sconfig-btn save-param-btn" data-id="${id}" data-type="${panelType}" style="background:var(--cyan); color:#000; font-weight:600; padding:6px 12px; border-radius:30px;">
+                    <i class="fa-solid fa-floppy-disk"></i> Salvar
+                </button>
+                <button class="sconfig-btn cancel-param-btn" data-id="${id}" data-type="${panelType}" style="background:rgba(255,255,255,0.05); color:#fff; padding:6px 12px; border-radius:30px;">
+                    <i class="fa-solid fa-xmark"></i> Cancelar
+                </button>
+            `;
+
+            // Bind save button
+            actionsEl.querySelector('.save-param-btn').addEventListener('click', async () => {
+                const newValue = bodyEl.querySelector('.edit-value-input').value.trim();
+                const newLabel = bodyEl.querySelector('.edit-label-input').value.trim();
+                const newNotes = bodyEl.querySelector('.edit-notes-input').value.trim();
+
+                if (!newValue) {
+                    showToast('O valor não pode ser vazio!');
+                    return;
+                }
+
+                item.value = newValue;
+                item.label = newLabel || newValue;
+                item.notes = newNotes;
+
+                renderSearchConfigPanel(panelType);
+
+                // Sync with API
+                if (id > 0) {
+                    try {
+                        const url = `${API_BASE_URL}/api/search-params/${id}?value=${encodeURIComponent(newValue)}&label=${encodeURIComponent(item.label)}&notes=${encodeURIComponent(newNotes)}`;
+                        await fetch(url, { method: 'PUT' });
+                        showToast('Parâmetro atualizado!');
+                    } catch (e) {
+                        showToast('Erro ao sincronizar com a API (modo offline).');
+                    }
+                } else {
+                    showToast('Parâmetro atualizado localmente!');
+                }
+            });
+
+            // Bind cancel button
+            actionsEl.querySelector('.cancel-param-btn').addEventListener('click', () => {
+                renderSearchConfigPanel(panelType);
+            });
         });
     });
 
@@ -1511,7 +1617,7 @@ async function addSearchParam() {
         return;
     }
 
-    const panelType = type === 'keyword' ? 'keywords' : type === 'site' ? 'sites' : 'engines';
+    const panelType = type === 'keyword' ? 'keywords' : type === 'site' ? 'sites' : type === 'engine' ? 'engines' : 'socials';
     const tempId = -(Date.now()); // negative temp ID
 
     const newItem = { id: tempId, type, value, label: label || value, active: true, notes };
@@ -1583,4 +1689,199 @@ function translateRelation(relation) {
         "other": "Outro"
     };
     return relations[relation] || relation;
+}
+
+// ── Edit Lattes / Timeline Items ──
+function openEditItemModal(item) {
+    const modal = document.getElementById('edit-item-modal');
+    if (!modal) return;
+
+    document.getElementById('edit-item-id').value = item.id;
+    document.getElementById('edit-item-title').value = item.title || "";
+    document.getElementById('edit-item-description').value = item.description || "";
+    document.getElementById('edit-item-year').value = item.year || "";
+    document.getElementById('edit-item-date').value = item.date || "";
+    document.getElementById('edit-item-participation').value = item.participation_type || "";
+    document.getElementById('edit-item-category').value = item.category || "";
+
+    modal.classList.add('active');
+}
+
+function initEditItemModal() {
+    const modal = document.getElementById('edit-item-modal');
+    const btnClose = document.getElementById('btn-close-edit-modal');
+    const btnCancel = document.getElementById('btn-cancel-edit-modal');
+    const form = document.getElementById('edit-item-form');
+
+    if (!modal) return;
+
+    const closeHandler = () => {
+        modal.classList.remove('active');
+    };
+
+    if (btnClose) btnClose.addEventListener('click', closeHandler);
+    if (btnCancel) btnCancel.addEventListener('click', closeHandler);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeHandler();
+    });
+
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-item-id').value;
+            const title = document.getElementById('edit-item-title').value;
+            const description = document.getElementById('edit-item-description').value;
+            const year = parseInt(document.getElementById('edit-item-year').value);
+            const dateVal = document.getElementById('edit-item-date').value;
+            const participation = document.getElementById('edit-item-participation').value;
+            const categoryVal = document.getElementById('edit-item-category').value;
+
+            try {
+                const url = `${API_BASE_URL}/api/timeline/${id}?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&year=${year}&date=${encodeURIComponent(dateVal)}&participation_type=${encodeURIComponent(participation)}&category=${encodeURIComponent(categoryVal)}`;
+                const response = await fetch(url, { method: 'PUT' });
+                if (response.ok) {
+                    showToast("Registro atualizado com sucesso!");
+                    closeHandler();
+                    await loadTimelineData();
+                    await loadLattesCurriculum();
+                } else {
+                    showToast("Erro ao salvar alterações no servidor.");
+                }
+            } catch (err) {
+                showToast("Erro ao se conectar ao servidor (modo offline).");
+            }
+        });
+    }
+}
+
+// ── AI Section Summaries (Sobre) ──
+const SECTIONS = ['courses', 'events', 'videos', 'news', 'testimonials'];
+
+function initSectionSummaries() {
+    SECTIONS.forEach(sec => {
+        loadSectionSummary(sec);
+
+        const btnEdit = document.getElementById(`btn-edit-summary-${sec}`);
+        const btnCancel = document.getElementById(`btn-cancel-summary-${sec}`);
+        const btnSave = document.getElementById(`btn-save-summary-${sec}`);
+        const btnAi = document.getElementById(`btn-generate-summary-${sec}`);
+
+        const form = document.getElementById(`edit-form-summary-${sec}`);
+        const textEl = document.getElementById(`summary-text-${sec}`);
+        const textarea = document.getElementById(`textarea-summary-${sec}`);
+
+        if (btnEdit) {
+            btnEdit.addEventListener('click', () => {
+                textarea.value = textEl.textContent.trim().startsWith("Carregando resumo") ? "" : textEl.textContent.trim();
+                form.style.display = 'block';
+            });
+        }
+
+        if (btnCancel) {
+            btnCancel.addEventListener('click', () => {
+                form.style.display = 'none';
+            });
+        }
+
+        if (btnSave) {
+            btnSave.addEventListener('click', async () => {
+                const newContent = textarea.value.trim();
+                if (!newContent) {
+                    showToast("O resumo não pode estar em branco!");
+                    return;
+                }
+
+                btnSave.disabled = true;
+                btnSave.textContent = "Salvando...";
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/section-summaries/${sec}?content=${encodeURIComponent(newContent)}`, { method: 'PUT' });
+                    if (response.ok) {
+                        textEl.textContent = newContent;
+                        form.style.display = 'none';
+                        showToast("Resumo atualizado com sucesso!");
+                    } else {
+                        showToast("Erro ao salvar resumo.");
+                    }
+                } catch (e) {
+                    showToast("Erro ao se conectar (modo offline).");
+                } finally {
+                    btnSave.disabled = false;
+                    btnSave.textContent = "Salvar";
+                }
+            });
+        }
+
+        if (btnAi) {
+            btnAi.addEventListener('click', async () => {
+                btnAi.disabled = true;
+                const icon = btnAi.querySelector('i');
+                if (icon) icon.className = "fa-solid fa-circle-notch fa-spin";
+                textEl.classList.add('generating-ai');
+                textEl.textContent = "Escrevendo e sintetizando biografia com Inteligência Artificial...";
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/section-summaries/${sec}/generate`, { method: 'POST' });
+                    if (response.ok) {
+                        const data = await response.json();
+                        typeText(textEl, data.content);
+                        showToast("Resumo gerado com IA e sincronizado!");
+                    } else {
+                        textEl.textContent = "Erro ao gerar resumo biográfico por IA.";
+                        textEl.classList.remove('generating-ai');
+                    }
+                } catch (e) {
+                    textEl.textContent = "Erro de conexão (modo offline).";
+                    textEl.classList.remove('generating-ai');
+                } finally {
+                    btnAi.disabled = false;
+                    if (icon) icon.className = "fa-solid fa-wand-magic-sparkles";
+                }
+            });
+        }
+    });
+}
+
+async function loadSectionSummary(sec) {
+    const textEl = document.getElementById(`summary-text-${sec}`);
+    if (!textEl) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/section-summaries/${sec}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.content) {
+                textEl.textContent = data.content;
+            } else {
+                textEl.textContent = getSectionDefaultSummaryText(sec);
+            }
+        }
+    } catch (e) {
+        textEl.textContent = getSectionDefaultSummaryText(sec);
+    }
+}
+
+function getSectionDefaultSummaryText(sec) {
+    const defaults = {
+        courses: "A Dra. Nássara Mesquita possui uma sólida trajetória de liderança e docência na área de saúde estética, tendo ministrado e participado de importantes cursos e mentorias profissionais de alto nível. É amplamente reconhecida como referência nacional e pioneira clínica pelo desenvolvimento do inovador método Microtox.",
+        events: "Como palestrante de destaque nacional, a Dra. Nássara Mesquita atua ativamente em congressos científicos, seminários e simpósios em todo o Brasil. Sua presença constante em fóruns consolida sua autoridade clínica de ponta frente à farmácia estética.",
+        videos: "A difusão do conhecimento estético e a educação profissional fazem parte da essência biográfica da Dra. Nássara Mesquita. Através de entrevistas de alta visibilidade nacional (como na TV Caras / IBTV) e podcasts de anatomia facial aplicada, ela educa milhares de profissionais.",
+        news: "Com forte destaque na mídia especializada e conselhos de classe, a presença na imprensa da Dra. Nássara Mesquita valida a excelência de suas técnicas inovadoras. Suas publicações e entrevistas científicas na Revista do CRF abordam a regulamentação profissional.",
+        testimonials: "Completando uma expressiva marca acadêmica, a Dra. Nássara Mesquita já orientou e supervisionou formalmente mais de 17 monografias e teses científicas de especialização em Saúde Estética e Cosmetologia. O carinho e a profunda gratidão de centenas de alunos mentorados e pacientes fiéis atestam sua maestria clínica."
+    };
+    return defaults[sec] || "";
+}
+
+function typeText(element, text) {
+    element.classList.remove('generating-ai');
+    element.textContent = "";
+    let idx = 0;
+    const interval = setInterval(() => {
+        element.textContent += text[idx];
+        idx++;
+        if (idx >= text.length) {
+            clearInterval(interval);
+        }
+    }, 15);
 }

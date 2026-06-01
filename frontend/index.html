@@ -241,6 +241,9 @@
                             <button class="sconfig-tab" data-tab="engines">
                                 <i class="fa-solid fa-magnifying-glass"></i> Buscadores
                             </button>
+                            <button class="sconfig-tab" data-tab="socials">
+                                <i class="fa-solid fa-share-nodes"></i> Redes Sociais
+                            </button>
                         </div>
 
                         <!-- Add new param form -->
@@ -251,6 +254,7 @@
                                     <option value="keyword">Palavra-Chave</option>
                                     <option value="site">Site / URL</option>
                                     <option value="engine">Buscador</option>
+                                    <option value="social">Rede Social</option>
                                 </select>
                                 <input type="text" id="sconfig-value-input" class="sconfig-input" placeholder="Valor (ex: Nássara Mesquita, instagram.com, Google...)">
                                 <input type="text" id="sconfig-label-input" class="sconfig-input" placeholder="Rótulo (ex: Nome completo, Instagram oficial...)">
@@ -290,6 +294,17 @@
                                 <span class="sconfig-count" id="count-engines">0 ativos</span>
                             </div>
                             <div class="sconfig-items-grid" id="sconfig-engines-list">
+                                <div class="sconfig-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando...</div>
+                            </div>
+                        </div>
+
+                        <!-- Socials panel -->
+                        <div class="sconfig-panel" id="sconfig-panel-socials">
+                            <div class="sconfig-panel-header">
+                                <h4><i class="fa-solid fa-share-nodes"></i> Redes Sociais Cadastradas</h4>
+                                <span class="sconfig-count" id="count-socials">0 ativas</span>
+                            </div>
+                            <div class="sconfig-items-grid" id="sconfig-socials-list">
                                 <div class="sconfig-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando...</div>
                             </div>
                         </div>
@@ -523,6 +538,34 @@
 
                 <!-- ── SECTION: COURSES ── -->
                 <section class="view-section" id="section-courses">
+                    <!-- AI Summary Section Header -->
+                    <div class="section-summary-banner glass-panel animate-fade-in" id="summary-banner-courses" style="margin-bottom: 24px;">
+                        <div class="summary-banner-glow"></div>
+                        <div class="summary-banner-content">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+                                <div>
+                                    <span class="badge-gold"><i class="fa-solid fa-wand-magic-sparkles"></i> Resumo Biográfico IA</span>
+                                    <p class="summary-banner-text" id="summary-text-courses" style="margin-top: 8px; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.95);">Carregando resumo sobre cursos...</p>
+                                </div>
+                                <div class="summary-actions" style="display: flex; gap: 10px; align-items: center;">
+                                    <button class="btn-summary-action btn-summary-edit" id="btn-edit-summary-courses" style="background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.2); color: var(--cyan); padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth); font-weight: 600;">
+                                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    </button>
+                                    <button class="btn-summary-action btn-summary-ai" id="btn-generate-summary-courses" style="background: rgba(170, 0, 255, 0.2); border: 1px solid rgba(170, 0, 255, 0.3); color: #d000ff; padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth); font-weight: 600;">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar com IA
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Inline edit form -->
+                            <div class="summary-edit-form" id="edit-form-summary-courses" style="display: none; margin-top: 15px;">
+                                <textarea id="textarea-summary-courses" class="summary-textarea" rows="3" style="width: 100%; background: rgba(7,7,9,0.5); border: 1px solid rgba(0,243,255,0.4); border-radius: 8px; color: #fff; padding: 10px; font-family: inherit; font-size: 13px; resize: vertical; outline: none;"></textarea>
+                                <div style="display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end;">
+                                    <button class="btn-summary-cancel" id="btn-cancel-summary-courses" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 11px;">Cancelar</button>
+                                    <button class="btn-summary-save" id="btn-save-summary-courses" style="background: var(--cyan); color: #000; border: none; padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 11px; font-weight: 600; box-shadow: 0 0 10px var(--cyan-glow);">Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="grid-layout-3" id="courses-grid-container">
                         <!-- Course cards populated by JS -->
                     </div>
@@ -530,6 +573,34 @@
 
                 <!-- ── SECTION: EVENTS ── -->
                 <section class="view-section" id="section-events">
+                    <!-- AI Summary Section Header -->
+                    <div class="section-summary-banner glass-panel animate-fade-in" id="summary-banner-events" style="margin-bottom: 24px;">
+                        <div class="summary-banner-glow"></div>
+                        <div class="summary-banner-content">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+                                <div>
+                                    <span class="badge-gold"><i class="fa-solid fa-wand-magic-sparkles"></i> Resumo Biográfico IA</span>
+                                    <p class="summary-banner-text" id="summary-text-events" style="margin-top: 8px; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.95);">Carregando resumo sobre eventos...</p>
+                                </div>
+                                <div class="summary-actions" style="display: flex; gap: 10px; align-items: center;">
+                                    <button class="btn-summary-action btn-summary-edit" id="btn-edit-summary-events" style="background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.2); color: var(--cyan); padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth); font-weight: 600;">
+                                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    </button>
+                                    <button class="btn-summary-action btn-summary-ai" id="btn-generate-summary-events" style="background: rgba(170, 0, 255, 0.2); border: 1px solid rgba(170, 0, 255, 0.3); color: #d000ff; padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth); font-weight: 600;">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar com IA
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Inline edit form -->
+                            <div class="summary-edit-form" id="edit-form-summary-events" style="display: none; margin-top: 15px;">
+                                <textarea id="textarea-summary-events" class="summary-textarea" rows="3" style="width: 100%; background: rgba(7,7,9,0.5); border: 1px solid rgba(0,243,255,0.4); border-radius: 8px; color: #fff; padding: 10px; font-family: inherit; font-size: 13px; resize: vertical; outline: none;"></textarea>
+                                <div style="display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end;">
+                                    <button class="btn-summary-cancel" id="btn-cancel-summary-events" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 11px;">Cancelar</button>
+                                    <button class="btn-summary-save" id="btn-save-summary-events" style="background: var(--cyan); color: #000; border: none; padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 11px; font-weight: 600; box-shadow: 0 0 10px var(--cyan-glow);">Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="grid-layout-3" id="events-grid-container">
                         <!-- Event cards populated by JS -->
                     </div>
@@ -537,6 +608,34 @@
 
                 <!-- ── SECTION: VIDEOS ── -->
                 <section class="view-section" id="section-videos">
+                    <!-- AI Summary Section Header -->
+                    <div class="section-summary-banner glass-panel animate-fade-in" id="summary-banner-videos" style="margin-bottom: 24px;">
+                        <div class="summary-banner-glow"></div>
+                        <div class="summary-banner-content">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+                                <div>
+                                    <span class="badge-gold"><i class="fa-solid fa-wand-magic-sparkles"></i> Resumo Biográfico IA</span>
+                                    <p class="summary-banner-text" id="summary-text-videos" style="margin-top: 8px; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.95);">Carregando resumo sobre vídeos...</p>
+                                </div>
+                                <div class="summary-actions" style="display: flex; gap: 10px; align-items: center;">
+                                    <button class="btn-summary-action btn-summary-edit" id="btn-edit-summary-videos" style="background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.2); color: var(--cyan); padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth); font-weight: 600;">
+                                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    </button>
+                                    <button class="btn-summary-action btn-summary-ai" id="btn-generate-summary-videos" style="background: rgba(170, 0, 255, 0.2); border: 1px solid rgba(170, 0, 255, 0.3); color: #d000ff; padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth); font-weight: 600;">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar com IA
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Inline edit form -->
+                            <div class="summary-edit-form" id="edit-form-summary-videos" style="display: none; margin-top: 15px;">
+                                <textarea id="textarea-summary-videos" class="summary-textarea" rows="3" style="width: 100%; background: rgba(7,7,9,0.5); border: 1px solid rgba(0,243,255,0.4); border-radius: 8px; color: #fff; padding: 10px; font-family: inherit; font-size: 13px; resize: vertical; outline: none;"></textarea>
+                                <div style="display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end;">
+                                    <button class="btn-summary-cancel" id="btn-cancel-summary-videos" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 11px;">Cancelar</button>
+                                    <button class="btn-summary-save" id="btn-save-summary-videos" style="background: var(--cyan); color: #000; border: none; padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 11px; font-weight: 600; box-shadow: 0 0 10px var(--cyan-glow);">Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="grid-layout-2" id="videos-grid-container">
                         <!-- Video cards populated by JS -->
                     </div>
@@ -544,6 +643,34 @@
 
                 <!-- ── SECTION: NEWS ── -->
                 <section class="view-section" id="section-news">
+                    <!-- AI Summary Section Header -->
+                    <div class="section-summary-banner glass-panel animate-fade-in" id="summary-banner-news" style="margin-bottom: 24px;">
+                        <div class="summary-banner-glow"></div>
+                        <div class="summary-banner-content">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+                                <div>
+                                    <span class="badge-gold"><i class="fa-solid fa-wand-magic-sparkles"></i> Resumo Biográfico IA</span>
+                                    <p class="summary-banner-text" id="summary-text-news" style="margin-top: 8px; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.95);">Carregando resumo sobre notícias...</p>
+                                </div>
+                                <div class="summary-actions" style="display: flex; gap: 10px; align-items: center;">
+                                    <button class="btn-summary-action btn-summary-edit" id="btn-edit-summary-news" style="background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.2); color: var(--cyan); padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth); font-weight: 600;">
+                                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    </button>
+                                    <button class="btn-summary-action btn-summary-ai" id="btn-generate-summary-news" style="background: rgba(170, 0, 255, 0.2); border: 1px solid rgba(170, 0, 255, 0.3); color: #d000ff; padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth); font-weight: 600;">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar com IA
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Inline edit form -->
+                            <div class="summary-edit-form" id="edit-form-summary-news" style="display: none; margin-top: 15px;">
+                                <textarea id="textarea-summary-news" class="summary-textarea" rows="3" style="width: 100%; background: rgba(7,7,9,0.5); border: 1px solid rgba(0,243,255,0.4); border-radius: 8px; color: #fff; padding: 10px; font-family: inherit; font-size: 13px; resize: vertical; outline: none;"></textarea>
+                                <div style="display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end;">
+                                    <button class="btn-summary-cancel" id="btn-cancel-summary-news" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 11px;">Cancelar</button>
+                                    <button class="btn-summary-save" id="btn-save-summary-news" style="background: var(--cyan); color: #000; border: none; padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 11px; font-weight: 600; box-shadow: 0 0 10px var(--cyan-glow);">Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="grid-layout-3" id="news-grid-container">
                         <!-- News cards populated by JS -->
                     </div>
@@ -551,6 +678,34 @@
 
                 <!-- ── SECTION: TESTIMONIALS ── -->
                 <section class="view-section" id="section-testimonials">
+                    <!-- AI Summary Section Header -->
+                    <div class="section-summary-banner glass-panel animate-fade-in" id="summary-banner-testimonials" style="margin-bottom: 24px;">
+                        <div class="summary-banner-glow"></div>
+                        <div class="summary-banner-content">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+                                <div>
+                                    <span class="badge-gold"><i class="fa-solid fa-wand-magic-sparkles"></i> Resumo Biográfico IA</span>
+                                    <p class="summary-banner-text" id="summary-text-testimonials" style="margin-top: 8px; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.95);">Carregando resumo sobre depoimentos...</p>
+                                </div>
+                                <div class="summary-actions" style="display: flex; gap: 10px; align-items: center;">
+                                    <button class="btn-summary-action btn-summary-edit" id="btn-edit-summary-testimonials" style="background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.2); color: var(--cyan); padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth); font-weight: 600;">
+                                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    </button>
+                                    <button class="btn-summary-action btn-summary-ai" id="btn-generate-summary-testimonials" style="background: rgba(170, 0, 255, 0.2); border: 1px solid rgba(170, 0, 255, 0.3); color: #d000ff; padding: 6px 12px; border-radius: 30px; cursor: pointer; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth); font-weight: 600;">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar com IA
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Inline edit form -->
+                            <div class="summary-edit-form" id="edit-form-summary-testimonials" style="display: none; margin-top: 15px;">
+                                <textarea id="textarea-summary-testimonials" class="summary-textarea" rows="3" style="width: 100%; background: rgba(7,7,9,0.5); border: 1px solid rgba(0,243,255,0.4); border-radius: 8px; color: #fff; padding: 10px; font-family: inherit; font-size: 13px; resize: vertical; outline: none;"></textarea>
+                                <div style="display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end;">
+                                    <button class="btn-summary-cancel" id="btn-cancel-summary-testimonials" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 11px;">Cancelar</button>
+                                    <button class="btn-summary-save" id="btn-save-summary-testimonials" style="background: var(--cyan); color: #000; border: none; padding: 6px 14px; border-radius: 30px; cursor: pointer; font-size: 11px; font-weight: 600; box-shadow: 0 0 10px var(--cyan-glow);">Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="dashboard-split-grid">
                         <div class="dashboard-card glass-panel">
                             <div class="card-header">
@@ -617,6 +772,58 @@
                         Carregando transcrição completa...
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Timeline Item Modal -->
+    <div class="modal-backdrop" id="edit-item-modal">
+        <div class="modal-container glass-panel" style="max-width: 550px;">
+            <div class="modal-header">
+                <h3 class="modal-title" style="color: var(--cyan); font-family: 'Audiowide', sans-serif;"><i class="fa-solid fa-pen-to-square"></i> Editar Registro</h3>
+                <button class="modal-close" id="btn-close-edit-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-item-form" style="display: flex; flex-direction: column; gap: 15px;">
+                    <input type="hidden" id="edit-item-id">
+                    
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <label for="edit-item-title" style="font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Título / Nome</label>
+                        <input type="text" id="edit-item-title" style="background: rgba(7,7,9,0.6); border: 1px solid rgba(0,243,255,0.2); border-radius: 6px; padding: 10px; color: #fff; font-size: 13px; outline: none; font-family: inherit;">
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <label for="edit-item-description" style="font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Descrição / Resumo</label>
+                        <textarea id="edit-item-description" rows="4" style="background: rgba(7,7,9,0.6); border: 1px solid rgba(0,243,255,0.2); border-radius: 6px; padding: 10px; color: #fff; font-size: 13px; outline: none; font-family: inherit; resize: vertical;"></textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label for="edit-item-year" style="font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Ano</label>
+                            <input type="number" id="edit-item-year" style="background: rgba(7,7,9,0.6); border: 1px solid rgba(0,243,255,0.2); border-radius: 6px; padding: 10px; color: #fff; font-size: 13px; outline: none; font-family: inherit;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label for="edit-item-date" style="font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Data Completa</label>
+                            <input type="text" id="edit-item-date" style="background: rgba(7,7,9,0.6); border: 1px solid rgba(0,243,255,0.2); border-radius: 6px; padding: 10px; color: #fff; font-size: 13px; outline: none; font-family: inherit;">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label for="edit-item-participation" style="font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Participação</label>
+                            <input type="text" id="edit-item-participation" style="background: rgba(7,7,9,0.6); border: 1px solid rgba(0,243,255,0.2); border-radius: 6px; padding: 10px; color: #fff; font-size: 13px; outline: none; font-family: inherit;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label for="edit-item-category" style="font-size: 11px; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Categoria Lattes</label>
+                            <input type="text" id="edit-item-category" style="background: rgba(7,7,9,0.6); border: 1px solid rgba(0,243,255,0.2); border-radius: 6px; padding: 10px; color: #fff; font-size: 13px; outline: none; font-family: inherit;">
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+                        <button type="button" class="btn-summary-cancel" id="btn-cancel-edit-modal" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 8px 18px; border-radius: 30px; cursor: pointer; font-size: 11px;">Cancelar</button>
+                        <button type="submit" class="btn-summary-save" style="background: var(--cyan); color: #000; border: none; padding: 8px 18px; border-radius: 30px; cursor: pointer; font-size: 11px; font-weight: 600; box-shadow: 0 0 10px var(--cyan-glow);">Salvar Alterações</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app.database import (
     get_db, People, Sources, Events, Awards, Courses,
     Videos, News, SocialPosts, Students, Testimonials, MediaMentions,
-    Timeline, Attachments, SearchParameters
+    Timeline, Attachments, SearchParameters, SectionSummaries
 )
 from app.schemas import RelevanceMap, TimelineItem, Student, Testimonial, Source, Course, Event, News as NewsSchema, Video
 
@@ -67,12 +67,19 @@ def startup_event():
                 {"value": "YouTube Search", "label": "YouTube", "notes": "Pesquisa de vídeos e podcasts"},
                 {"value": "Bing", "label": "Bing", "notes": "Motor de busca secundário"}
             ]
+            socials = [
+                {"value": "instagram.com/dranassaramesquita", "label": "Instagram Profissional", "notes": "Perfil oficial da Dra. Nássara Mesquita no Instagram"},
+                {"value": "facebook.com/dranassaramesquita", "label": "Facebook Profissional", "notes": "Perfil no Facebook"},
+                {"value": "linkedin.com/in/nassara-mesquita-878880182", "label": "LinkedIn Acadêmico", "notes": "Perfil acadêmico e profissional no LinkedIn"}
+            ]
             for kw in keywords:
                 db.add(SearchParameters(type="keyword", value=kw["value"], label=kw["label"], notes=kw["notes"], active=1))
             for st in sites:
                 db.add(SearchParameters(type="site", value=st["value"], label=st["label"], notes=st["notes"], active=1))
             for eg in engines:
                 db.add(SearchParameters(type="engine", value=eg["value"], label=eg["label"], notes=eg["notes"], active=1 if eg["value"] != "Bing" else 0))
+            for sc in socials:
+                db.add(SearchParameters(type="social", value=sc["value"], label=sc["label"], notes=sc["notes"], active=1))
             db.commit()
             print("[Startup] Default search parameters seeded.")
     except Exception as e:
@@ -271,8 +278,8 @@ def get_lattes_curriculum(db: Session = Depends(get_db)):
 def get_search_params(db: Session = Depends(get_db)):
     """Return all search parameters grouped by type."""
     params = db.query(SearchParameters).order_by(SearchParameters.type, SearchParameters.id).all()
-    result = {"keywords": [], "sites": [], "engines": []}
-    type_map = {"keyword": "keywords", "site": "sites", "engine": "engines"}
+    result = {"keywords": [], "sites": [], "engines": [], "socials": []}
+    type_map = {"keyword": "keywords", "site": "sites", "engine": "engines", "social": "socials"}
     for p in params:
         key = type_map.get(p.type, "keywords")
         result[key].append({
@@ -338,6 +345,208 @@ def delete_search_param(param_id: int, db: Session = Depends(get_db)):
     db.delete(param)
     db.commit()
     return {"deleted": param_id}
+
+@app.put("/api/timeline/{item_id}")
+def update_timeline_item(
+    item_id: int,
+    title: Optional[str] = None,
+    description: Optional[str] = None,
+    year: Optional[int] = None,
+    month: Optional[int] = None,
+    date: Optional[str] = None,
+    participation_type: Optional[str] = None,
+    category: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    item = db.query(Timeline).filter(Timeline.id == item_id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item da linha do tempo não encontrado.")
+    
+    if title is not None: item.title = title
+    if description is not None: item.description = description
+    if year is not None: item.year = year
+    if month is not None: item.month = month
+    if date is not None: item.date = date
+    if participation_type is not None: item.participation_type = participation_type
+    if category is not None: item.category = category
+    
+    # Sync with children tables
+    if item.source_table and item.source_row_id:
+        table_name = item.source_table.lower()
+        row_id = item.source_row_id
+        if table_name == "courses":
+            child = db.query(Courses).filter(Courses.id == row_id).first()
+            if child:
+                if title is not None: child.title = title
+                if description is not None: child.description = description
+                if date is not None: child.date = date
+        elif table_name == "events":
+            child = db.query(Events).filter(Events.id == row_id).first()
+            if child:
+                if title is not None: child.name = title
+                if description is not None: child.description = description
+                if date is not None: child.date = date
+        elif table_name == "videos":
+            child = db.query(Videos).filter(Videos.id == row_id).first()
+            if child:
+                if title is not None: child.title = title
+                if description is not None: child.summary = description
+                if date is not None: child.date = date
+        elif table_name == "news":
+            child = db.query(News).filter(News.id == row_id).first()
+            if child:
+                if title is not None: child.title = title
+                if description is not None: child.summary = description
+                if date is not None: child.date = date
+        elif table_name == "awards":
+            child = db.query(Awards).filter(Awards.id == row_id).first()
+            if child:
+                if title is not None: child.title = title
+                if description is not None: child.description = description
+                if date is not None: child.date = date
+        elif table_name == "socials" or table_name == "socialposts":
+            child = db.query(SocialPosts).filter(SocialPosts.id == row_id).first()
+            if child:
+                if description is not None: child.content = description
+                if date is not None: child.date = date
+
+    db.commit()
+    return {"status": "success", "message": "Item atualizado com sucesso", "id": item.id}
+
+@app.get("/api/section-summaries/{section_name}")
+def get_section_summary(section_name: str, db: Session = Depends(get_db)):
+    summary = db.query(SectionSummaries).filter(SectionSummaries.section_name == section_name).first()
+    if not summary:
+        return {"section_name": section_name, "content": ""}
+    return {"section_name": summary.section_name, "content": summary.content, "updated_at": summary.updated_at}
+
+@app.put("/api/section-summaries/{section_name}")
+def update_section_summary(section_name: str, content: str, db: Session = Depends(get_db)):
+    summary = db.query(SectionSummaries).filter(SectionSummaries.section_name == section_name).first()
+    if not summary:
+        summary = SectionSummaries(section_name=section_name, content=content)
+        db.add(summary)
+    else:
+        summary.content = content
+    db.commit()
+    db.refresh(summary)
+    return {"status": "success", "content": summary.content}
+
+@app.post("/api/section-summaries/{section_name}/generate")
+def generate_section_summary(section_name: str, db: Session = Depends(get_db)):
+    context_texts = []
+    if section_name == "courses":
+        items = db.query(Courses).all()
+        for idx, it in enumerate(items):
+            context_texts.append(f"Curso {idx+1}: {it.title} - Data: {it.date} - Função: {'Instrutora/Professora' if it.role == 'instructor' else 'Aluna'} - {it.description or ''}")
+    elif section_name == "events":
+        items = db.query(Events).all()
+        for idx, it in enumerate(items):
+            context_texts.append(f"Evento {idx+1}: {it.name} - Data: {it.date} - Local: {it.location} - {it.description or ''}")
+    elif section_name == "videos":
+        items = db.query(Videos).all()
+        for idx, it in enumerate(items):
+            context_texts.append(f"Vídeo/Podcast {idx+1}: {it.title} - Resumo: {it.summary or ''}")
+    elif section_name == "news":
+        items = db.query(News).all()
+        for idx, it in enumerate(items):
+            context_texts.append(f"Notícia/Imprensa {idx+1}: {it.title} - Editora: {it.publisher} - Data: {it.date} - Resumo: {it.summary or ''}")
+    elif section_name == "testimonials":
+        items = db.query(Testimonials).all()
+        for idx, it in enumerate(items):
+            context_texts.append(f"Depoimento {idx+1} por {it.author} ({it.relation or 'Aluno'}): \"{it.content}\"")
+        students = db.query(Students).all()
+        student_names = [s.name for s in students]
+        if student_names:
+            context_texts.append(f"Lista de alunos mentorados/orientados: {', '.join(student_names)}")
+    else:
+        raise HTTPException(status_code=400, detail="Seção inválida para geração de resumo.")
+
+    context_str = "\n".join(context_texts)
+    
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    generated_content = ""
+    
+    if gemini_key:
+        try:
+            import httpx
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
+            headers = {"Content-Type": "application/json"}
+            prompt = (
+                f"Você é um redator biográfico profissional para a Dra. Nássara Mesquita (Farmacêutica Esteta, especialista em Microtox, Toxina Botulínica e Harmonização Facial de alta performance em Goiânia/GO).\n"
+                f"Com base nas informações abaixo cadastradas na seção de '{section_name.upper()}', crie um texto 'Sobre' resumido e super atrativo de 2 a 4 frases que apresente o impacto e a relevância profissional dela nessa área.\n"
+                f"Regras:\n"
+                f"- O texto deve ser escrito em terceira pessoa do singular, tom premium, elegante, objetivo e profissional.\n"
+                f"- Destaque os números relevantes (como a quantidade de alunos, diversidade de locais, parcerias como a Delta Proto, ou a autoridade das palestras e premiações).\n"
+                f"- Retorne APENAS o texto final do resumo, sem introduções, aspas extras ou explicações.\n\n"
+                f"DADOS DA SEÇÃO:\n{context_str}"
+            )
+            payload = {
+                "contents": [
+                    {
+                        "parts": [
+                            {"text": prompt}
+                        ]
+                    }
+                ],
+                "generationConfig": {
+                    "temperature": 0.3,
+                    "maxOutputTokens": 250
+                }
+            }
+            response = httpx.post(url, headers=headers, json=payload, timeout=10.0)
+            if response.status_code == 200:
+                resp_json = response.json()
+                generated_content = resp_json['candidates'][0]['content']['parts'][0]['text'].strip()
+        except Exception as e:
+            print(f"[Gemini API Exception] {e}. Falling back to heuristic generator.")
+            
+    if not generated_content:
+        # Heuristic/Rule-based Fallback Generator of High Quality
+        if section_name == "courses":
+            generated_content = (
+                f"A Dra. Nássara Mesquita possui uma sólida trajetória de liderança e docência na área de saúde estética, "
+                f"tendo ministrado e participado de {len(db.query(Courses).all())} importantes cursos e mentorias profissionais "
+                f"de alto nível. É amplamente reconhecida como referência nacional e pioneira clínica pelo desenvolvimento do inovador método Microtox "
+                f"e suas mentorias personalizadas de alta performance em Goiânia e diversas capitais."
+            )
+        elif section_name == "events":
+            generated_content = (
+                f"Como palestrante de destaque nacional, a Dra. Nássara Mesquita atua ativamente em congressos científicos, "
+                f"seminários e simpósios em todo o Brasil. Sua presença constante em fóruns como o XII Congresso Mundial de Farmacêuticos "
+                f"e comissões reguladoras do CRF e CFF consolida sua autoridade clínica de ponta frente à farmácia estética."
+            )
+        elif section_name == "videos":
+            generated_content = (
+                f"A difusão do conhecimento estético e a educação profissional fazem parte da essência biográfica da Dra. Nássara Mesquita. "
+                f"Através de entrevistas de alta visibilidade nacional (como na TV Caras / IBTV), podcasts de anatomia facial aplicada e reels com execução passo a passo "
+                f"de protocolos práticos, ela educa milhares de profissionais com base em biossegurança e resultados refinados."
+            )
+        elif section_name == "news":
+            generated_content = (
+                f"Com forte destaque na mídia especializada e conselhos de classe, a presença na imprensa da Dra. Nássara Mesquita "
+                f"valida a excelência de suas técnicas inovadoras. Suas publicações e entrevistas científicas na Revista do CRF abordam "
+                f"a regulamentação profissional, tratamentos regenerativos modernos e a segurança dermoestética com respaldo ético indiscutível."
+            )
+        elif section_name == "testimonials":
+            students_count = db.query(Students).count()
+            generated_content = (
+                f"Completando uma expressiva marca acadêmica, a Dra. Nássara Mesquita já orientou e supervisionou formalmente "
+                f"mais de {students_count} monografias e teses científicas de especialização em Saúde Estética e Cosmetologia. "
+                f"O carinho e a profunda gratidão de centenas de alunos mentorados e pacientes fiéis atestam sua maestria clínica, "
+                f"ética impecável e grande dedicação ao ensino."
+            )
+
+    # Save to database
+    summary = db.query(SectionSummaries).filter(SectionSummaries.section_name == section_name).first()
+    if not summary:
+        summary = SectionSummaries(section_name=section_name, content=generated_content)
+        db.add(summary)
+    else:
+        summary.content = generated_content
+    db.commit()
+    db.refresh(summary)
+    return {"status": "success", "content": summary.content}
 
 # Root landing check
 @app.get("/")
