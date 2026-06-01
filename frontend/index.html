@@ -113,6 +113,10 @@
                         <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
                         <input type="text" id="global-search-input" placeholder="Buscar em toda a presença digital...">
                     </div>
+                    <button class="btn-sync-pipeline" id="btn-sync-pipeline">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>Buscar Atualizações</span>
+                    </button>
                 </div>
             </header>
 
@@ -210,6 +214,21 @@
                 <!-- ── SECTION: SEARCH CONFIG (Parâmetros de Busca) ── -->
                 <section class="view-section" id="section-search-config">
                     <div class="search-config-wrapper animate-fade-in">
+
+                        <!-- Run Search Action Bar -->
+                        <div class="sconfig-run-bar glass-panel">
+                            <div class="sconfig-run-info">
+                                <i class="fa-solid fa-robot"></i>
+                                <div>
+                                    <strong>Pipeline de Monitoramento</strong>
+                                    <span>Execute uma nova varredura usando os parâmetros cadastrados abaixo</span>
+                                </div>
+                            </div>
+                            <button class="btn-run-search" id="btn-run-search">
+                                <i class="fa-solid fa-magnifying-glass-chart"></i>
+                                <span>Rodar Busca Agora</span>
+                            </button>
+                        </div>
 
                         <!-- Tab navigation -->
                         <div class="sconfig-tabs">

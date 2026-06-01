@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadDashboardTestimonials();
     loadTimelineData();
     initSyncButton();
+    initRunSearchButton();
     initSearch();
     initModalClose();
     initTimelineModeButtons();
@@ -44,6 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     initPrintTimelineButton();
     initPrintLattesButton();
     initSearchConfig();
+    loadSearchConfig();
 });
 
 async function loadSourcesMap() {
@@ -393,24 +395,28 @@ function renderFacetSection(elementId, facetsObj, activeVal, onClickCallback) {
 }
 
 function initTimelineModeButtons() {
-    const btnStandard = document.getElementById("btn-mode-standard");
-    const btnHierarchical = document.getElementById("btn-mode-hierarchical");
+    // Use event delegation on the buttons container for reliability
+    const buttonsContainer = document.querySelector(".display-mode-buttons");
+    if (!buttonsContainer) return;
 
-    if (btnStandard && btnHierarchical) {
-        btnStandard.addEventListener("click", () => {
-            btnStandard.classList.add("active");
-            btnHierarchical.classList.remove("active");
+    buttonsContainer.addEventListener("click", (e) => {
+        const btn = e.target.closest(".display-mode-btn");
+        if (!btn) return;
+
+        // Update active state on all buttons
+        buttonsContainer.querySelectorAll(".display-mode-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        // Set the mode
+        if (btn.id === "btn-mode-standard") {
             displayMode = "standard";
-            renderTimelineView();
-        });
-
-        btnHierarchical.addEventListener("click", () => {
-            btnHierarchical.classList.add("active");
-            btnStandard.classList.remove("active");
+        } else if (btn.id === "btn-mode-hierarchical") {
             displayMode = "hierarchical";
-            renderTimelineView();
-        });
-    }
+        }
+
+        // Re-render with new mode
+        renderTimelineView();
+    });
 }
 
 function initClearFiltersButton() {
@@ -454,12 +460,17 @@ function renderTimelineView() {
     container.innerHTML = "";
 
     const activeTimelineSection = document.getElementById("timeline-scroll-axis");
+    const timelineLine = activeTimelineSection ? activeTimelineSection.querySelector(".timeline-line") : null;
+
     if (activeTimelineSection) {
-        // Toggle the visual line class based on mode
         if (displayMode === "hierarchical") {
             activeTimelineSection.classList.remove("timeline-container");
+            activeTimelineSection.classList.add("timeline-hierarchical");
+            if (timelineLine) timelineLine.style.display = "none";
         } else {
             activeTimelineSection.classList.add("timeline-container");
+            activeTimelineSection.classList.remove("timeline-hierarchical");
+            if (timelineLine) timelineLine.style.display = "";
         }
     }
 
@@ -1153,22 +1164,48 @@ function bindVideoTriggers() {
 
 // ── Synchronization Pipeline Actions ──
 function initSyncButton() {
-    btnSyncPipeline.addEventListener("click", () => {
-        btnSyncPipeline.disabled = true;
-        btnSyncPipeline.querySelector("i").classList.add("fa-spin");
-        btnSyncPipeline.querySelector("span:last-child").textContent = "Sincronizando V2...";
+    const btn = document.getElementById("btn-sync-pipeline");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+        btn.disabled = true;
+        btn.querySelector("i").classList.add("fa-spin");
+        btn.querySelector("span").textContent = "Sincronizando...";
 
         setTimeout(async () => {
-            btnSyncPipeline.disabled = false;
-            btnSyncPipeline.querySelector("i").classList.remove("fa-spin");
-            btnSyncPipeline.querySelector("span:last-child").textContent = "Buscar Atualizações";
+            btn.disabled = false;
+            btn.querySelector("i").classList.remove("fa-spin");
+            btn.querySelector("span").textContent = "Buscar Atualizações";
 
             await loadProfile();
             await loadRelevanceMetrics();
             await loadTimelineData();
 
-            showToast("Banco de Dados Biográfico Sincronizado com Sucesso V2!");
+            showToast("Banco de Dados Sincronizado com Sucesso!");
         }, 1500);
+    });
+}
+
+function initRunSearchButton() {
+    const btn = document.getElementById("btn-run-search");
+    if (!btn) return;
+    btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        btn.querySelector("i").classList.add("fa-spin");
+        btn.querySelector("span").textContent = "Executando Varredura...";
+
+        try {
+            const resp = await fetch(`${API_BASE_URL}/api/pipeline/run`, { method: "POST" });
+            const msg = resp.ok ? "Varredura iniciada! Os resultados serão atualizados em breve." : "Pipeline iniciado (modo simulado).";
+            showToast(msg);
+        } catch (e) {
+            showToast("Pipeline iniciado em modo simulado. Nenhum agente conectado.");
+        } finally {
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.querySelector("i").classList.remove("fa-spin");
+                btn.querySelector("span").textContent = "Rodar Busca Agora";
+            }, 2500);
+        }
     });
 }
 
@@ -1316,20 +1353,27 @@ async function loadSearchConfig() {
     try {
         const resp = await fetch(`${API_BASE_URL}/api/search-params`);
         if (!resp.ok) throw new Error('API error');
-        searchConfigData = await resp.json();
-        renderSearchConfigPanel('keywords');
-        renderSearchConfigPanel('sites');
-        renderSearchConfigPanel('engines');
-    } catch (e) {
-        // If API has no data yet, seed with defaults
-        if (searchConfigData.keywords.length === 0) {
+        const data = await resp.json();
+
+        // If API returns empty arrays, seed with defaults
+        const hasData = (data.keywords && data.keywords.length > 0) ||
+                        (data.sites && data.sites.length > 0) ||
+                        (data.engines && data.engines.length > 0);
+
+        if (hasData) {
+            searchConfigData = data;
+        } else {
             searchConfigData = getDefaultSearchParams();
         }
-        renderSearchConfigPanel('keywords');
-        renderSearchConfigPanel('sites');
-        renderSearchConfigPanel('engines');
+    } catch (e) {
+        // API offline — seed with defaults
+        searchConfigData = getDefaultSearchParams();
         console.warn('Usando parâmetros padrão (API offline):', e);
     }
+
+    renderSearchConfigPanel('keywords');
+    renderSearchConfigPanel('sites');
+    renderSearchConfigPanel('engines');
 }
 
 function getDefaultSearchParams() {
